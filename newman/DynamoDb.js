@@ -28,10 +28,10 @@ const params = {
   }
 };
 
-const command = new QueryCommand(params);
+const command2 = new QueryCommand(params);
 
 try {
-  const response = await client.send(command);
+  const response = await client.send(command2);
   console.log('Success! Query results:', response.Items);
 } catch (error) {
   console.error('Error:', error);
