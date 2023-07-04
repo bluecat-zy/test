@@ -12,10 +12,16 @@ newman.run({
 
 import { DynamoDBClient, DescribeTableCommand } from "@aws-sdk/client-dynamodb";
 
-const client = new DynamoDBClient({ region: 'ap-south-1' });
+const client = new DynamoDBClient({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+  }
+});
 
 const command = new DescribeTableCommand({
-  TableName: 't-info'
+  TableName: 't-info' // 替换为你的表格名称
 });
 
 client.send(command)
@@ -25,4 +31,5 @@ client.send(command)
   .catch(err => {
     console.error('Error:', err);
   });
+
 
