@@ -10,24 +10,19 @@ newman.run({
     }
 })
 
-// 引入 AWS SDK
-const AWS = require('aws-sdk');
+import { DynamoDBClient, DescribeTableCommand } from "@aws-sdk/client-dynamodb";
 
-// 配置 AWS 凭证和区域
-AWS.config.update({
-  accessKeyId: 'AKIARA2JM4WX3VI6HL4T',
-  secretAccessKey: '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',
-  region: 'ap-south-1' // 替换为你的区域
+const client = new DynamoDBClient({ region: 'ap-south-1' });
+
+const command = new DescribeTableCommand({
+  TableName: 't-info'
 });
 
-// 创建 DynamoDB 客户端
-const dynamodb = new AWS.DynamoDB();
-
-// 示例：获取 DynamoDB 表的信息
-dynamodb.describeTable({ TableName: 't-info' }, (err, data) => {
-  if (err) {
+client.send(command)
+  .then(data => {
+    console.log('Success! Table description:', data.Table);
+  })
+  .catch(err => {
     console.error('Error:', err);
-  } else {
-    console.log('Table Information:', data.Table);
-  }
-});
+  });
+
