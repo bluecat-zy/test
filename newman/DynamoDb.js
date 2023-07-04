@@ -1,4 +1,4 @@
-import { DynamoDBClient, DescribeTableCommand } from "@aws-sdk/client-dynamodb";
+const { DynamoDBClient, DescribeTableCommand } = require("@aws-sdk/client-dynamodb");
 
 const client = new DynamoDBClient({
   region: process.env.AWS_REGION,
