@@ -24,6 +24,11 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: '18'
+    # 安装aws-sdk插件
+    - name: install aws-sdk
+      run: npm install aws-sdk
+    - name: ls aws-sdk
+      run: npm ls aws-sdk
     # 安装newman插件
     - name: install Newman
       run: npm install newman
