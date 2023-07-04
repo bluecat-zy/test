@@ -14,8 +14,8 @@ jobs:
     - name: 配置 AWS 凭证
       uses: aws-actions/configure-aws-credentials@v1
       with:
-       aws-access-key-id: ${{AKIARA2JM4WX3VI6HL4T}}
-       aws-secret-access-key: ${{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}}
+       aws-access-key-id: ${{ secrets.AKIARA2JM4WX3VI6HL4T }}
+       aws-secret-access-key: ${{ secrets.fMPgOff7GuqkeoTiR2TfPZVPrpvrT1iaPNR18Qae }}
        aws-region: ap-south-1 # 替换为你的区域
     - name: Checkout code
       uses: actions/checkout@v2
