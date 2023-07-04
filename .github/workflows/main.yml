@@ -29,14 +29,16 @@ jobs:
       run: npm install aws-sdk
     - name: ls aws-sdk
       run: npm ls aws-sdk
-    # 安装newman插件
-    - name: install Newman
-      run: npm install newman
-    - name: Run JavaScript code
+    - name: Connect to DynamoDB
       env:
         AWS_REGION: ap-south-1
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: node newman/DynamoDb.js
+    # 安装newman插件
+    - name: install Newman
+      run: npm install newman
+    - name: Run JavaScript code
       run: |
         echo 'Run newman.js'
         # 执行newman.js
