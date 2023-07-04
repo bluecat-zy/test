@@ -8,17 +8,17 @@ const client = new DynamoDBClient({
   }
 });
 
-const command = new DescribeTableCommand({
-  TableName: 't-InfoLog' // 替换为你的表格名称
-});
+// const command = new DescribeTableCommand({
+//   TableName: 't-InfoLog' // 替换为你的表格名称
+// });
 
-client.send(command)
-  .then(data => {
-    console.log('Success! Table description:', data.Table);
-  })
-  .catch(err => {
-    console.error('Error:', err);
-  });
+// client.send(command)
+//   .then(data => {
+//     console.log('Success! Table description:', data.Table);
+//   })
+//   .catch(err => {
+//     console.error('Error:', err);
+//   });
 
 const params = {
   TableName: 't-InfoLog', // 替换为你的表格名称
@@ -28,12 +28,13 @@ const params = {
   }
 };
 
-const command2 = new QueryCommand(params);
+const command = new QueryCommand(params);
 
-try {
-  const response = await client.send(command2);
-  console.log('Success! Query results:', response.Items);
-} catch (error) {
-  console.error('Error:', error);
-}
+client.send(command)
+  .then((response) => {
+    console.log('Success! Query results:', response.Items);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
 
