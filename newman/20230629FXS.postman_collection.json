@@ -1,0 +1,215 @@
+{
+	"info": {
+		"_postman_id": "0e8f6c04-8e4d-401c-a6a2-b2bc9610acd4",
+		"name": "20230629FXS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "【IC101S_印CV/EV】RegisterFactoryData【FDF】 Copy 3",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{IC_apikey}}"
+					},
+					{
+						"key": "x-transactionid",
+						"type": "text",
+						"value": "IC103S_036"
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "gzip"
+					},
+					{
+						"key": "Connection",
+						"type": "text",
+						"value": "close"
+					},
+					{
+						"warning": "Key contains invalid whitespace characters.",
+						"key": "Content-Encoding",
+						"type": "text",
+						"value": "gzip",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"FactoryInfoRegisterReq\": [{\r\n    \"Vin\": \"test0629\",\r\n    \"VehicleInfo\": {\r\n      \"Imei\": \"359983100000224\",\r\n      \"Euiccid\": \"89033023311330000000012069123875\",\r\n      \"DpcCarType\": \"YTA-1-H10\",\r\n      \"DcmDestination\": 74,\r\n      \"DcmGrade\": 1,\r\n      \"DcmModelYear\": 19,\r\n      \"UserAgent\": \"STI1I0000L74FF\",\r\n      \"BrandCode\": \"S\",\r\n      \"CountryCode\": \"069\",\r\n      \"CompanyName\": \"TMCI\",\r\n      \"DcmPartNumber\": \"1234567890\",\r\n      \"DcmSupplier\": 64,\r\n      \"DestinationPackage\": \"Fa\",\r\n      \"DestinationSymbol\": \"A\",\r\n      \"UnitSerialNumber\": \"1234567890123456\"\r\n    }\r\n  }]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{IC_host}}/FactoryDataAPI/RegisterFactoryData"
+			},
+			"response": []
+		},
+		{
+			"name": "IT208E eConnectTripDataNotification【IG OFF】 Copy 2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"Longitude\");",
+							"pm.environment.get(\"Latitude\");",
+							"    var d = new Date();",
+							"    var yyyy = d.getUTCFullYear();",
+							"    var MM = ('0' + (d.getUTCMonth() + 1)).slice(-2);",
+							"    var dd = ('0' + d.getUTCDate()).slice(-2);",
+							"    var hh = ('0' + d.getUTCHours()).slice(-2);",
+							"    var mm = ('0' + d.getUTCMinutes()).slice(-2);",
+							"    var ss = ('0' + d.getUTCSeconds()).slice(-2);",
+							"pm.globals.set(\"current_UTC\", (yyyy + '-' + MM + '-' + dd + 'T' + hh + ':' + mm + ':' + ss + 'Z')); "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{IC_apikey}}"
+					},
+					{
+						"key": "Content-Encoding",
+						"type": "text",
+						"value": "gzip",
+						"disabled": true
+					},
+					{
+						"key": "x-transactionid",
+						"type": "text",
+						"value": "0000"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"Vin\": \"00359983100004971\",\r\n  \"TripData\": {\r\n    \"OccurrenceTime\": \"{{current_UTC}}\",\r\n    \"TripDataStartTime\": \"{{current_UTC}}\",\r\n    \"TripDataStopTime\": \"{{current_UTC}}\",\r\n    \"PositionInfoCategory\": 5,\r\n    \"PositionInfo\": {\r\n      \"AcquisitionDatetime\": \"{{current_UTC}}\",\r\n      \"Longitude\": {{Longitude}},\r\n      \"Latitude\": {{Latitude}},\r\n      \"DcmPositionAccuracy\": {\r\n        \"MajorAxisError\": 2,\r\n        \"MinorAxisError\": 2,\r\n        \"Gradient\": 45,\r\n        \"AcquisitionState\": 1\r\n      }\r\n    },\r\n    \"ValidFlag\": 1,\r\n    \"UnderRepairFlag\": 0,\r\n    \"TripDataList\": [{\r\n      \"DataId\": 4,\r\n      \"ValidFlag\": 0,\r\n      \"TripDataDetail\": 4294967295\r\n    }]\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{IC_host}}/eConnectTripNotification/eConnectTripDataNotification"
+			},
+			"response": []
+		},
+		{
+			"name": "IT303E DTCNotification【DTC】 Copy 2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.get(\"Longitude\");",
+							"pm.environment.get(\"Latitude\");",
+							"pm.globals.set(\"current_UTC\", (new Date()).toISOString());"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "x-api-key",
+						"type": "text",
+						"value": "{{IT_apikey}}"
+					},
+					{
+						"key": "Content-Encoding",
+						"type": "text",
+						"value": "gzip",
+						"disabled": true
+					},
+					{
+						"key": "x-transactionid",
+						"type": "text",
+						"value": "IT303E_sotu"
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "gzip"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Vin\": \"00359983100004971\",\r\n    \"CounterValue\": \"02\",\r\n    \"TriggerIdentifier\": \"w\",\r\n    \"OccurrenceTime\": \"{{current_UTC}}\",\r\n    \"AcquisitionTime\": {\r\n        \"AcquisitionDatetime\": \"{{current_UTC}}\",\r\n        \"TimeDifferenceInfo\": \"-0000\",\r\n        \"SummerTimeSetting\": \"0\",\r\n        \"AcquisitionSource\": \"1\"\r\n    },\r\n    \"Longitude\": {{Longitude}},\r\n    \"Latitude\": {{Latitude}},\r\n    \"DiagnosticInfo\": [\r\n        {\r\n            \"StatusCode\": \"90\",\r\n            \"CanId\": \"0661\",\r\n            \"CanframeData\": \"101359024B924013\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0661\",\r\n            \"CanframeData\": \"2109924113019242\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0661\",\r\n            \"CanframeData\": \"2213099249040100\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"90\",\r\n            \"CanId\": \"0676\",\r\n            \"CanframeData\": \"101359024B924013\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0676\",\r\n            \"CanframeData\": \"2109924113019242\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0676\",\r\n            \"CanframeData\": \"2213099249040100\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"90\",\r\n            \"CanId\": \"0720\",\r\n            \"CanframeData\": \"101359024B924013\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0720\",\r\n            \"CanframeData\": \"2109924113019242\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0720\",\r\n            \"CanframeData\": \"2213099249040100\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"90\",\r\n            \"CanId\": \"0726\",\r\n            \"CanframeData\": \"101359024B924013\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0726\",\r\n            \"CanframeData\": \"2109924113019242\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0726\",\r\n            \"CanframeData\": \"2213099249040100\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"90\",\r\n            \"CanId\": \"0728\",\r\n            \"CanframeData\": \"101359024B924013\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0728\",\r\n            \"CanframeData\": \"2109924113019242\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0728\",\r\n            \"CanframeData\": \"2213099249040100\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"90\",\r\n            \"CanId\": \"0729\",\r\n            \"CanframeData\": \"101359024B924013\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0729\",\r\n            \"CanframeData\": \"2109924113019242\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0729\",\r\n            \"CanframeData\": \"2213099249040100\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"90\",\r\n            \"CanId\": \"072E\",\r\n            \"CanframeData\": \"101359024B924013\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"072E\",\r\n            \"CanframeData\": \"2109924113019242\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"072E\",\r\n            \"CanframeData\": \"2213099249040100\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"90\",\r\n            \"CanId\": \"0761\",\r\n            \"CanframeData\": \"101359024B924013\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0761\",\r\n            \"CanframeData\": \"2109924113019242\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0761\",\r\n            \"CanframeData\": \"2213099249040100\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"90\",\r\n            \"CanId\": \"0782\",\r\n            \"CanframeData\": \"101359024B924013\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0782\",\r\n            \"CanframeData\": \"2109924113019242\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"0782\",\r\n            \"CanframeData\": \"2213099249040100\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"90\",\r\n            \"CanId\": \"07EB\",\r\n            \"CanframeData\": \"101359024B924013\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"07EB\",\r\n            \"CanframeData\": \"2109924113019242\"\r\n        },\r\n        {\r\n            \"StatusCode\": \"91\",\r\n            \"CanId\": \"07EB\",\r\n            \"CanframeData\": \"2213099249040100\"\r\n        }\r\n    ]\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{IT_host}}/AllDiagnosticsAPI/DTCNotification"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "IT_host",
+			"value": "https://4qppov5b81.execute-api.ap-south-1.amazonaws.com/test",
+			"type": "default"
+		},
+		{
+			"key": "IT_apikey",
+			"value": "eNBtBAYtlu4yyb9ffaCIs4pfircFYiQr2YXTYVYa",
+			"type": "default"
+		},
+		{
+			"key": "IC_host",
+			"value": "https://xgz4v377ff.execute-api.ap-south-1.amazonaws.com/test",
+			"type": "default"
+		},
+		{
+			"key": "IC_apikey",
+			"value": "GD1Ig6yQLs91DMIW6xksl69yrvHlK1Of4FPtoAW1",
+			"type": "default"
+		},
+		{
+			"key": "Longitude",
+			"value": "0.000001",
+			"type": "default"
+		},
+		{
+			"key": "Latitude",
+			"value": "0.000001",
+			"type": "default"
+		}
+	]
+}
