@@ -9,7 +9,7 @@ const client = new DynamoDBClient({
 });
 
 const command = new DescribeTableCommand({
-  TableName: 't-info' // 替换为你的表格名称
+  TableName: 't-infoLog' // 替换为你的表格名称
 });
 
 client.send(command)
