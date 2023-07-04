@@ -11,12 +11,12 @@ jobs:
   run_js:
     runs-on: ubuntu-latest
     steps:
-    - name: 配置 AWS 凭证
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-       aws-region: ap-south-1 # 替换为你的区域
+    #- name: 配置 AWS 凭证
+     # uses: aws-actions/configure-aws-credentials@v1
+      #with:
+      # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+       #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+       #aws-region: ap-south-1 # 替换为你的区域
     - name: Checkout code
       uses: actions/checkout@v2
     # 配置node版本 
