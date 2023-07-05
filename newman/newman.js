@@ -18,6 +18,7 @@ newman.run({
 }).on('done', function (err, response) {
          try {
             const requestBodyArray = JSON.parse(requestBodyRaw);
+           console.log(requestBodyArray);
          if (Array.isArray(requestBodyArray)) {
              jsonDataArray.forEach((item) => {
              const vin = findVinValue(item);
