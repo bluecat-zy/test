@@ -1,5 +1,5 @@
 const newman = require('newman');
-const param = '参数';
+const param = [];
 module.exports.param = param;
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
@@ -20,13 +20,15 @@ newman.run({
         }
     
 }).on('done', function (err, response) {
+    let i =0;
     for (let res of response.run.executions) {
         const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
-        console.log(res.response)
+        
         console.log(res.response.status)
         console.log(res.response.code)
-        //const responseTime = new date(responseTimeHeader).format('YYYY-MM-DDTHH:mm:ss');
-        //console.log(responseTime)
+        const date = new Date(responseTimeHeader).toISOString().replace('.000Z', '');     
+        param[i]={ url:res.request.url,status:res.response.code:res.response.code,date: date },
+        i++;
     }
 })
 
