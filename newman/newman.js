@@ -42,7 +42,7 @@ newman.run({
       console.log(date);
       const params = {
         TableName: 't-InfoLog', // 表名
-        FilterExpression: '#ts >= :value AND #log = :value2 AND #ifid = :value3',
+        FilterExpression: 'contains(#ts,:value) AND #log = :value2 AND #ifid = :value3',
         ExpressionAttributeNames: {
         '#ts': 'timestamp',
         '#log': 'logLevel',
