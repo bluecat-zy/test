@@ -22,6 +22,17 @@ newman.run({
 }).on('beforeRequest', (error, args) => {
   console.log(args.request.url.path);
 }).on('done', function (err, response) {
+  // 测试运行完成时触发此事件
+  if (err || response.error) {
+    console.error('运行出错:', err || response.error);
+  } else {
+    console.log('测试运行完成.');
+    response.run.executions.forEach((execution) => {
+      const requestName = execution.item.name;
+      console.log(`请求标题：${requestName}`);
+      // 处理其他请求结果
+    });
+  }
     // let i = 0;
     // for (let res of response.run.executions) {
     //   const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
