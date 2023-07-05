@@ -54,7 +54,7 @@ separatedData.forEach((item) => {
        
         const params = {
         TableName: 't-InfoLog', // 表名
-        FilterExpression: '#ts >= :value' AND #log = :value2',
+        FilterExpression: '#ts >= :value AND #log = :value2',
         ExpressionAttributeNames: {
         '#ts': 'timestamp',
         '#log': 'logLevel'
