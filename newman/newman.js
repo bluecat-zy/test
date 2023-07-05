@@ -15,32 +15,41 @@ newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
        requestBodyRaw = args.request.body.raw;
-   console.log(requestBodyRaw);
+  // 分隔数据
+const separatedData = requestBodyRaw.trim().split('\n\n');
+
+// 输出分隔后的数据
+separatedData.forEach((d) => {
+  console.log(d);
+  console.log();
+});
 }).on('done', function (err, response) {
-         try {
-            const requestBodyArray = JSON.parse(requestBodyRaw);
-           console.log(requestBodyArray);
-         if (Array.isArray(requestBodyArray)) {
-             jsonDataArray.forEach((item) => {
-             const vin = findVinValue(item);
-             const data = {vin:'',timestamp:''};
-             data.vin = vin;
-             dataArray.push(data);
-            });
-         } else {
+     //     try {
+     //        const requestBodyArray = JSON.parse(requestBodyRaw);
+     //     if (Array.isArray(requestBodyArray)) {
+     //         jsonDataArray.forEach((item) => {
+     //         const vin = findVinValue(item);
+     //         const data = {vin:'',timestamp:''};
+     //         data.vin = vin;
+     //         dataArray.push(data);
+     //        });
+     //     } else {
                
-         }
-        } catch (e) {
-          if (require.main === module) {
-            console.error('Error parsing request body:', e);
-          }
-     }
+     //     }
+     //    } catch (e) {
+     //      if (require.main === module) {
+     //        console.error('Error parsing request body:', e);
+     //      }
+     // }
+  console.log("开始睡眠");
+  await sleep(3000);
+  console.log("睡眠结束");
     for (let res of response.run.executions) {
         const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
       console.log(responseTimeHeader);
         console.log(res.response.status)
         console.log(res.response.code)
-        const date = new Date(new Date(responseTimeHeader).toISOString().replace('.000Z', '')).getTime(); 
+        const date = new Date(responseTimeHeader).toISOString().replace('.000Z', '');
         console.log(date);
        
         const params = {
@@ -50,7 +59,7 @@ newman.run({
         '#ts': 'timestamp'
         },
         ExpressionAttributeValues: {
-        ':value': { N:date }
+        ':value': { S:date }
         }
         };
         const command = new ScanCommand(params);
