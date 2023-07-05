@@ -24,7 +24,7 @@ newman.run({
         console.log(res.response)
         console.log(res.response.status)
         console.log(res.response.code)
-        const responseTime = moment(responseTimeHeader.value).format('YYYY-MM-DDTHH:mm:ss');
+        const responseTime = new data(responseTimeHeader).format('YYYY-MM-DDTHH:mm:ss');
         console.log(responseTime)
     }
 })
