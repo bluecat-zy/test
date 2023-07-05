@@ -15,15 +15,17 @@ newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
        requestBodyRaw = args.request.body.raw;
-  // 分隔数据
+}).on('done', function (err, response) {
+   // 分隔数据
 const separatedData = requestBodyRaw.trim().split('\n\n');
 
 // 输出分隔后的数据
-separatedData.forEach((d) => {
-  console.log(d);
+separatedData.forEach((item) => {
+  const jsonData = JSON.parse(item);
+  const vin = findVinValue(jsonData);
+  console.log(vin);
   console.log();
 });
-}).on('done', function (err, response) {
      //     try {
      //        const requestBodyArray = JSON.parse(requestBodyRaw);
      //     if (Array.isArray(requestBodyArray)) {
@@ -41,10 +43,7 @@ separatedData.forEach((d) => {
      //        console.error('Error parsing request body:', e);
      //      }
      // }
-  console.log("开始睡眠");
-sleep(3000).then(() => {
-  console.log("睡眠结束");
-});
+ main();
     for (let res of response.run.executions) {
         const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
       console.log(responseTimeHeader);
@@ -86,6 +85,18 @@ const findVinValue = (obj) => {
     }
   }
 };
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function main() {
+  console.log("开始睡眠");
+  await sleep(1000);
+  console.log("睡眠结束");
+}
+
+
 
 
 
