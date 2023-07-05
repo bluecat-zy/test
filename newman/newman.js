@@ -15,18 +15,7 @@ newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
        requestBodyRaw = args.request.body.raw;
-  // 使用正则表达式提取每一条数据
-    const regex = /{[^{}]+}/g;
-    const matches = requestBodyRaw.match(regex);
-
-    // 遍历匹配到的每一条数据
-    for (const match of matches) {
-        // 将每一条数据解析为对象
-        const data = JSON.parse(match);
-        
-        // 在这里进行你想要的操作，例如打印整条数据
-        console.log(data);
-    }
+   console.log(requestBodyRaw);
 }).on('done', function (err, response) {
          try {
             const requestBodyArray = JSON.parse(requestBodyRaw);
@@ -51,7 +40,7 @@ newman.run({
       console.log(responseTimeHeader);
         console.log(res.response.status)
         console.log(res.response.code)
-        const date = new Date(responseTimeHeader.replace('.000Z', '')).getTime(); 
+        const date = new Date(new Date(responseTimeHeader).toISOString().replace('.000Z', '')).getTime(); 
         console.log(date);
        
         const params = {
