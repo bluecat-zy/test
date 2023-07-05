@@ -23,7 +23,7 @@ newman.run({
         console.log(res.response)
         console.log(res.response.status)
         console.log(res.response.code)
-        console.log(new Date(res.response.responseTime).toISOString();)
+        console.log(new Date(res.response.responseTime).toISOString())
     }
 })
 
