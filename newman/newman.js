@@ -7,7 +7,7 @@ const client = new DynamoDBClient({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
   }
 });
-const ddbDocClient = DynamoDBDocumentClient.from(client);
+const ddbDocClient =new DynamoDBDocumentClient(client);
 
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
