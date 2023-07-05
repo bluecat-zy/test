@@ -8,78 +8,66 @@ const client = new DynamoDBClient({
   }
 });
 
-var dataArray =[];
-var requestBodyRaw =[];
-var requestPath = []
-var requestTitle = [];
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
-  }).on('prerequest', (error, args) => {
-  // // 当每个请求的前置脚本执行时触发此事件
-  // console.log(args.item.name);
-  
-  // 每个请求发送之前触发的操作
-  if (!error) {
-     console.log(args);
-    const requestName = args.item.name;
-    console.log(`请求标题1：${requestName}`);
-    // 执行其他操作
-  }
-}).on('beforeRequest', (error, args) => {
-     console.log(args.request.url.path);
-     console.log('------------');
-     console.log(args);
 }).on('done', function (err, response) {
-  // 测试运行完成时触发此事件
+   // 当测试运行完成时触发此事件
   if (err || response.error) {
     console.error('运行出错:', err || response.error);
   } else {
     console.log('测试运行完成.');
+    console.log('总体摘要：', response.summary);
+   
+    // 遍历每个请求的执行结果
     response.run.executions.forEach((execution) => {
+      
       const requestName = execution.item.name;
-      console.log(`请求标题：${requestName}`);
-      // 处理其他请求结果
+      const requestMethod = execution.request.method;
+      const requestUrl = execution.request.url.toString();
+      const requestHeaders = execution.request.headers.toJSON();
+      const requestBody = execution.request.body;
+
+      console.log(`请求方法：${requestMethod}`);
+      console.log(`请求URL：${requestUrl}`);
+      console.log('请求头部：', requestHeaders);
+      console.log('请求正文：', requestBody);
+      console.log("status:"+execution.response.status+"code:"+execution.response.code)
+       const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
+      console.log(responseTimeHeader);
+      const dateObj = new Date(responseTimeHeader);
+      dateObj.setSeconds(dateObj.getSeconds() - 1);
+      const date =  dateObj.toISOString().replace('.000Z', '');
+      console.log(date);
+      const params = {
+        TableName: 't-InfoLog', // 表名
+        FilterExpression: '#ts >= :value AND #log = :value2 AND #ifid = :value3',
+        ExpressionAttributeNames: {
+        '#ts': 'timestamp',
+        '#log': 'logLevel',
+        '#ifid': 'ifid'
+        },
+        ExpressionAttributeValues: {
+        ':value': { S:date },
+        ':value2': { S:'ERROR'},
+        ':value3': { S:'IT303E'}
+        }
+      };
+      if (requestName.includes("IT303E")) {
+      params.ExpressionAttributeValues[':value3'] = { S: 'IT303E' };
+      }
+      if (requestName.includes("IT208E")) {
+      params.ExpressionAttributeValues[':value3'] = { S: 'IT208E' };
+      }
+     const command = new ScanCommand(params);
+      client.send(command)
+      .then((response) => {
+      console.log('Success! Query results:', response.Items);
+      })
+      .catch((error) => {
+      console.error('Error:', error);
+      });
     });
   }
-    // let i = 0;
-    // for (let res of response.run.executions) {
-    //   const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
-    //   console.log(responseTimeHeader);
-    //   console.log("status:"+res.response.status+"code:"+res.response.code)
-    //   const dateObj = new Date(responseTimeHeader);
-    //   dateObj.setSeconds(dateObj.getSeconds() - 1);
-    //   const date =  dateObj.toISOString().replace('.000Z', '');
-    //   console.log(date);
-    //     const params = {
-    //     TableName: 't-InfoLog', // 表名
-    //     FilterExpression: '#ts >= :value AND #log = :value2 AND #ifid = :value3',
-    //     ExpressionAttributeNames: {
-    //     '#ts': 'timestamp',
-    //     '#log': 'logLevel',
-    //     '#ifid': 'ifid'
-    //     },
-    //     ExpressionAttributeValues: {
-    //     ':value': { S:date },
-    //     ':value2': { S:'ERROR'},
-    //     ':value3': { S:'IT303E'}
-    //     }
-    //     };
-    //   if (requestTitle[i].includes("IT303E")) {
-    //   params.ExpressionAttributeValues[':value3'] = { S: 'IT303E' };
-    //   }
-    //   if (requestTitle[i].includes("IT208E")) {
-    //   params.ExpressionAttributeValues[':value3'] = { S: 'IT208E' };
-    //   }
-    //     const command = new ScanCommand(params);
-    //     client.send(command)
-    //     .then((response) => {
-    //      console.log('Success! Query results:', response.Items);
-    //     })
-    //     .catch((error) => {
-    //     console.error('Error:', error);
-    //     });
-    //   i++;
-    //}
 })
 
 
