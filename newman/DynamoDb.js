@@ -1,5 +1,5 @@
 const { DynamoDBClient, DescribeTableCommand ,QueryCommand} = require("@aws-sdk/client-dynamodb");
-const {param} = require("./newman");
+const {data} = require("./newman");
 const client = new DynamoDBClient({
   region: process.env.AWS_REGION,
   credentials: {
@@ -8,7 +8,7 @@ const client = new DynamoDBClient({
   }
 });
 
-console.log(param)
+console.log(data)
 const params = {
   TableName: 't-InfoLog', // 替换为你的表格名称
   KeyConditionExpression: 'serviceId = :value', // 设置查询条件表达式，不再使用占位符
