@@ -32,7 +32,7 @@ newman.run({
       console.log('请求头部：', requestHeaders);
       console.log('请求正文：', requestBody);
       console.log("status:"+execution.response.status+"code:"+execution.response.code)
-       const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
+       const responseTimeHeader = execution.response.headers.find(header => header.key.toLowerCase() === 'date');
       console.log(responseTimeHeader);
       const dateObj = new Date(responseTimeHeader);
       dateObj.setSeconds(dateObj.getSeconds() - 1);
