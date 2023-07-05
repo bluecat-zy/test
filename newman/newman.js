@@ -18,7 +18,7 @@ newman.run({
 }).on('done', function (err, response) {
    // 分隔数据
 const separatedData = requestBodyRaw.trim().split('\n\n');
-
+ console.log(separatedData);
 // 输出分隔后的数据
 separatedData.forEach((item) => {
   const jsonData = JSON.parse(item);
@@ -61,7 +61,7 @@ separatedData.forEach((item) => {
         },
         ExpressionAttributeValues: {
         ':value': { S:date },
-        ':value2': { S:'ERROR' }  
+        ':value2': { S:'ERROR'}  
         }
         };
         const command = new ScanCommand(params);
