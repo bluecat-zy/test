@@ -30,8 +30,9 @@ newman.run({
         param[i]={ url:res.request.url,status:res.response.status,code:res.response.code,date:date },
         i++;
     }
+    console.log(param)
+    module.exports.param = param;
 })
-console.log(param)
-module.exports.param = param;
+
 
 
