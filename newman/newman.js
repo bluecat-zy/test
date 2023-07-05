@@ -44,9 +44,12 @@ newman.run({
        
         const params = {
         TableName: 't-InfoLog', // 表名
-        KeyConditionExpression: 'timestamp >= :date',
+        KeyConditionExpression: '#ts >= :value',
+        ExpressionAttributeNames: {
+        '#ts': 'timestamp'
+        },
         ExpressionAttributeValues: {
-        ':date': { S:date }
+        ':value': { S:date }
         }
         };
         const command = new QueryCommand(params);
