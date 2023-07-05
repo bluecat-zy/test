@@ -10,14 +10,20 @@ const client = new DynamoDBClient({
 
 var dataArray =[];
 var requestBodyRaw =[];
-
+var requestPath = []
+var requestTitle = [];
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
+  }).on('prerequest', (error, args) => {
+  // 当每个请求的前置脚本执行时触发此事件
+   requestTitle.push(args.item.name); 
+  console.log(args.request.body.raw);
 }).on('beforeRequest', (error, args) => {
        requestBodyRaw = args.request.body.raw;
+       requestPath = args.request.url.path.join('/');
 }).on('done', function (err, response) {
    // 分隔数据
-const separatedData = requestBodyRaw.trim().split('\n\n');
+const separatedData = requestBodyRaw.trim().split('\n');
  console.log(separatedData);
 // 输出分隔后的数据
 separatedData.forEach((item) => {
@@ -26,44 +32,37 @@ separatedData.forEach((item) => {
   console.log(vin);
   console.log();
 });
-     //     try {
-     //        const requestBodyArray = JSON.parse(requestBodyRaw);
-     //     if (Array.isArray(requestBodyArray)) {
-     //         jsonDataArray.forEach((item) => {
-     //         const vin = findVinValue(item);
-     //         const data = {vin:'',timestamp:''};
-     //         data.vin = vin;
-     //         dataArray.push(data);
-     //        });
-     //     } else {
-               
-     //     }
-     //    } catch (e) {
-     //      if (require.main === module) {
-     //        console.error('Error parsing request body:', e);
-     //      }
-     // }
- main();
+  console.log();
+    let i = 0;
     for (let res of response.run.executions) {
-        const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
+      const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
       console.log(responseTimeHeader);
-        console.log(res.response.status)
-        console.log(res.response.code)
-        const date = new Date(responseTimeHeader).toISOString().replace('.000Z', '');
+      console.log("status:"+res.response.status+"code:"+res.response.code)
+      const dateObj = new Date(responseTimeHeader);
+      dateObj.setSeconds(dateObj.getSeconds() - 1);
+      const date =  dateObj.toISOString().replace('.000Z', '');
         console.log(date);
        
         const params = {
         TableName: 't-InfoLog', // 表名
-        FilterExpression: '#ts >= :value AND #log = :value2',
+        FilterExpression: '#ts >= :value AND #log = :value2 AND #ifid = :value3',
         ExpressionAttributeNames: {
         '#ts': 'timestamp',
-        '#log': 'logLevel'
+        '#log': 'logLevel',
+        '#ifid': 'ifid'
         },
         ExpressionAttributeValues: {
         ':value': { S:date },
-        ':value2': { S:'ERROR'}  
+        ':value2': { S:'ERROR'},
+        ':value3': { S:'IT303E'}
         }
         };
+      if (requestTitle[i].includes("IT303E")) {
+      params.ExpressionAttributeValues[':value3'] = { S: 'IT303E' };
+      }
+      if (requestTitle[i].includes("IT208E")) {
+      params.ExpressionAttributeValues[':value3'] = { S: 'IT208E' };
+      }
         const command = new ScanCommand(params);
         client.send(command)
         .then((response) => {
@@ -72,6 +71,7 @@ separatedData.forEach((item) => {
         .catch((error) => {
         console.error('Error:', error);
         });
+      i++;
     }
 })
 
@@ -88,15 +88,6 @@ const findVinValue = (obj) => {
   }
 };
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function main() {
-  console.log("开始睡眠");
-  await sleep(1000);
-  console.log("睡眠结束");
-}
 
 
 
