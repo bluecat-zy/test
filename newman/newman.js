@@ -1,4 +1,5 @@
 const newman = require('newman');
+const data1 ='123';
 const data =[];
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
