@@ -1,6 +1,6 @@
 const newman = require('newman');
 const param = [];
-module.exports.param = param;
+
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
@@ -31,5 +31,6 @@ newman.run({
         i++;
     }
 })
+module.exports.param = param;
 
 
