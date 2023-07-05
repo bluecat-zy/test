@@ -1,56 +1,10 @@
 {
 	"info": {
-		"_postman_id": "0e8f6c04-8e4d-401c-a6a2-b2bc9610acd4",
+		"_postman_id": "27350155-87e2-4ff4-b430-ca5f0c26420e",
 		"name": "20230629FXS",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
-		{
-			"name": "【IC101S_印CV/EV】RegisterFactoryData【FDF】 Copy 3",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "x-api-key",
-						"type": "text",
-						"value": "{{IC_apikey}}"
-					},
-					{
-						"key": "x-transactionid",
-						"type": "text",
-						"value": "IC103S_036"
-					},
-					{
-						"key": "Accept-Encoding",
-						"type": "text",
-						"value": "gzip"
-					},
-					{
-						"key": "Connection",
-						"type": "text",
-						"value": "close"
-					},
-					{
-						"warning": "Key contains invalid whitespace characters.",
-						"key": "Content-Encoding",
-						"type": "text",
-						"value": "gzip",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"FactoryInfoRegisterReq\": [{\r\n    \"Vin\": \"test0629\",\r\n    \"VehicleInfo\": {\r\n      \"Imei\": \"359983100000224\",\r\n      \"Euiccid\": \"89033023311330000000012069123875\",\r\n      \"DpcCarType\": \"YTA-1-H10\",\r\n      \"DcmDestination\": 74,\r\n      \"DcmGrade\": 1,\r\n      \"DcmModelYear\": 19,\r\n      \"UserAgent\": \"STI1I0000L74FF\",\r\n      \"BrandCode\": \"S\",\r\n      \"CountryCode\": \"069\",\r\n      \"CompanyName\": \"TMCI\",\r\n      \"DcmPartNumber\": \"1234567890\",\r\n      \"DcmSupplier\": 64,\r\n      \"DestinationPackage\": \"Fa\",\r\n      \"DestinationSymbol\": \"A\",\r\n      \"UnitSerialNumber\": \"1234567890123456\"\r\n    }\r\n  }]\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": "{{IC_host}}/FactoryDataAPI/RegisterFactoryData"
-			},
-			"response": []
-		},
 		{
 			"name": "IT208E eConnectTripDataNotification【IG OFF】 Copy 2",
 			"event": [
@@ -102,7 +56,16 @@
 						}
 					}
 				},
-				"url": "{{IC_host}}/eConnectTripNotification/eConnectTripDataNotification"
+				"url": {
+					"raw": "{{IC_host}}/eConnectTripNotification/eConnectTripDataNotification",
+					"host": [
+						"{{IC_host}}"
+					],
+					"path": [
+						"eConnectTripNotification",
+						"eConnectTripDataNotification"
+					]
+				}
 			},
 			"response": []
 		},
@@ -155,7 +118,16 @@
 						}
 					}
 				},
-				"url": "{{IT_host}}/AllDiagnosticsAPI/DTCNotification"
+				"url": {
+					"raw": "{{IT_host}}/AllDiagnosticsAPI/DTCNotification",
+					"host": [
+						"{{IT_host}}"
+					],
+					"path": [
+						"AllDiagnosticsAPI",
+						"DTCNotification"
+					]
+				}
 			},
 			"response": []
 		}
