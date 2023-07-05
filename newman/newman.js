@@ -2,7 +2,10 @@ const newman = require('newman');
 
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
-
+}).on('beforeRequest', (error, args) => {
+    if (!error) {
+        console.log('Request Parameters:', args.request.body.raw);
+    }
 }).on('done', function (err, response) {
     for (let res of response.run.executions) {
         console.log(res.response.status)
