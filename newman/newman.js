@@ -44,7 +44,7 @@ newman.run({
        
         const params = {
         TableName: 't-InfoLog', // 表名
-        KeyConditionExpression: '#ts >= :value',
+        FilterExpression: '#ts >= :value',
         ExpressionAttributeNames: {
         '#ts': 'timestamp'
         },
