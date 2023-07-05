@@ -10,8 +10,8 @@ newman.run({
          try {
             const requestBodyArray = JSON.parse(requestBodyRaw);
          if (Array.isArray(requestBodyArray)) {
-             jsonDataArray.forEach((data) => {
-             const vin = findVinValue(data);
+             jsonDataArray.forEach((item) => {
+             const vin = findVinValue(item);
              const data = {vin:'',timestamp:''};
              data.vin = vin;
              dataArray.push(data);
