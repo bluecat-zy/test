@@ -27,7 +27,7 @@ newman.run({
         console.log(res.response.status)
         console.log(res.response.code)
         const date = new Date(responseTimeHeader).toISOString().replace('.000Z', '');     
-        param[i]={ url:res.request.url,status:res.response.code:res.response.code,date: date },
+        param[i]={ url:res.request.url,status:res.response.status,code:res.response.code,date:date },
         i++;
     }
 })
