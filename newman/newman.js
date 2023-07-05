@@ -42,8 +42,9 @@ separatedData.forEach((d) => {
      //      }
      // }
   console.log("开始睡眠");
-  await sleep(3000);
+sleep(3000).then(() => {
   console.log("睡眠结束");
+});
     for (let res of response.run.executions) {
         const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
       console.log(responseTimeHeader);
