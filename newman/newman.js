@@ -22,13 +22,13 @@ newman.run({
   if (!error) {
     const requestName = args.item.name;
     console.log(`请求标题1：${requestName}`);
-     console.log('------------');
-     console.log(args.request.body);
-     console.log(args.request.body.raw);
     // 执行其他操作
   }
 }).on('beforeRequest', (error, args) => {
-  console.log(args.request.url.path);
+    console.log(args.request.url.path);
+     console.log('------------');
+     console.log(args.request.body);
+     console.log(args.request.body.raw);
 }).on('done', function (err, response) {
   // 测试运行完成时触发此事件
   if (err || response.error) {
