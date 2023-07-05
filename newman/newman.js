@@ -1,5 +1,6 @@
 const newman = require('newman');
 const { DynamoDBClient, DescribeTableCommand ,ScanCommand,DynamoDBDocumentClient} = require("@aws-sdk/client-dynamodb");
+const { DynamoDBDocumentClient } require("@aws-sdk/lib-dynamodb");
 const client = new DynamoDBClient({
   region: process.env.AWS_REGION,
   credentials: {
@@ -7,7 +8,7 @@ const client = new DynamoDBClient({
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
   }
 });
-const ddbDocClient =new DynamoDBDocumentClient(client);
+const ddbDocClient =new DynamoDBDocumentClient.from(client);
 
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
