@@ -1,5 +1,5 @@
 //const newman = require('newman');
-const data1 ='123';
+var data1 ='123';
 data1 ='234';
 module.exports.data1 = data1;
 //const data =[];
