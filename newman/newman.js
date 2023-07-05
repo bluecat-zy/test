@@ -20,10 +20,11 @@ newman.run({
     
 }).on('done', function (err, response) {
     for (let res of response.run.executions) {
+        const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
         console.log(res.response)
         console.log(res.response.status)
         console.log(res.response.code)
-        console.log(new Date(res.response.responseTime).toISOString())
+        console.log(new Date(responseTimeHeader).toISOString())
     }
 })
 
