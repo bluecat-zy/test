@@ -5,7 +5,7 @@ newman.run({
 }).on('beforeRequest', (error, args) => {
      console.log('Request Parameters:', args.request.body.raw);
        const requestBody = JSON.parse(args.request.body.raw);
-        
+        console.log(requestBody);
         Object.entries(requestBody).forEach(([key, value]) => {
             console.log(`${key}: ${value}`);
         });
@@ -14,6 +14,7 @@ newman.run({
     for (let res of response.run.executions) {
         console.log(res.response.status)
         console.log(res.response.code)
+        console.log(res.response.responseTime)
     }
 })
 
