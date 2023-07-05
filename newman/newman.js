@@ -48,9 +48,10 @@ newman.run({
      }
     for (let res of response.run.executions) {
         const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
+      console.log(responseTimeHeader);
         console.log(res.response.status)
         console.log(res.response.code)
-        const date = new Date(responseTimeHeader).toISOString().replace('.000Z', ''); 
+        const date = new Date(responseTimeHeader.replace('.000Z', '')).getTime(); 
         console.log(date);
        
         const params = {
@@ -60,7 +61,7 @@ newman.run({
         '#ts': 'timestamp'
         },
         ExpressionAttributeValues: {
-        ':value': { S:date }
+        ':value': { N:date }
         }
         };
         const command = new ScanCommand(params);
