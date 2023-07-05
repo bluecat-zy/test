@@ -1,6 +1,5 @@
 const newman = require('newman');
-const param = [];
-
+module.exports.param = [];
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
@@ -20,18 +19,14 @@ newman.run({
         }
     
 }).on('done', function (err, response) {
-    let i =0;
     for (let res of response.run.executions) {
         const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
         
         console.log(res.response.status)
         console.log(res.response.code)
         const date = new Date(responseTimeHeader).toISOString().replace('.000Z', '');     
-        param[i]={ url:res.request.url,status:res.response.status,code:res.response.code,date:date },
-        i++;
+        module.exports.param.push({ url:res.request.url,status:res.response.status,code:res.response.code,date:date });
     }
-    console.log(param)
-    module.exports.param = param;
 })
 
 
