@@ -80,7 +80,7 @@ const findVinValue = (obj) => {
       if (result) {
         return result; // 返回找到的结果
       }
-    } else if (key === 'vin') {
+    } else if (key === 'Vin') {
       return obj[key]; // 找到 vin 值，返回该值
     }
   }
