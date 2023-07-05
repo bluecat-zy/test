@@ -34,7 +34,7 @@ newman.run({
         dataArray.push({status:res.response.status,code:res.response.code,date:date });
     }
 })
-
+console.log(dataArray);
 const findVinValue = (obj) => {
   for (let key in obj) {
     if (typeof obj[key] === 'object') { // 判断属性值是否为对象
