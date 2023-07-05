@@ -1,5 +1,5 @@
 const { DynamoDBClient, DescribeTableCommand ,QueryCommand} = require("@aws-sdk/client-dynamodb");
-
+const { param } = require("./newman");
 const client = new DynamoDBClient({
   region: process.env.AWS_REGION,
   credentials: {
@@ -8,18 +8,7 @@ const client = new DynamoDBClient({
   }
 });
 
-// const command = new DescribeTableCommand({
-//   TableName: 't-InfoLog' // 替换为你的表格名称
-// });
-
-// client.send(command)
-//   .then(data => {
-//     console.log('Success! Table description:', data.Table);
-//   })
-//   .catch(err => {
-//     console.error('Error:', err);
-//   });
-
+console.log(param)
 const params = {
   TableName: 't-InfoLog', // 替换为你的表格名称
   KeyConditionExpression: 'serviceId = :value', // 设置查询条件表达式，不再使用占位符
