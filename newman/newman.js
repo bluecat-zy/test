@@ -17,12 +17,14 @@ newman.run({
   }).on('prerequest', (error, args) => {
   // // 当每个请求的前置脚本执行时触发此事件
   // console.log(args.item.name);
-  // console.log('------------');
-  // console.log(args.request.body.raw);
+  
   // 每个请求发送之前触发的操作
   if (!error) {
     const requestName = args.item.name;
     console.log(`请求标题1：${requestName}`);
+     console.log('------------');
+     console.log(args.request.body);
+     console.log(args.request.body.raw);
     // 执行其他操作
   }
 }).on('beforeRequest', (error, args) => {
