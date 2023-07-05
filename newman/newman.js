@@ -17,23 +17,14 @@ newman.run({
   }).on('prerequest', (error, args) => {
   // 当每个请求的前置脚本执行时触发此事件
    requestTitle.push(args.item.name); 
+  console.log(args.item.name);
+  
   console.log(args.request.body.raw);
 }).on('beforeRequest', (error, args) => {
        requestBodyRaw = args.request.body.raw;
        requestPath = args.request.url.path.join('/');
-}).on('done', function (err, response) {
-//    // 分隔数据
-// const separatedData = requestBodyRaw.trim().split('\n');
-//  console.log(separatedData);
-// // 输出分隔后的数据
-// separatedData.forEach((item) => {
-//   const jsonData = JSON.parse(item);
-//   const vin = findVinValue(jsonData);
-//   console.log(vin);
-//   console.log();
-// });
-  console.log(requestTitle);
   console.log(requestPath);
+}).on('done', function (err, response) {
     let i = 0;
     for (let res of response.run.executions) {
       const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
@@ -42,8 +33,7 @@ newman.run({
       const dateObj = new Date(responseTimeHeader);
       dateObj.setSeconds(dateObj.getSeconds() - 1);
       const date =  dateObj.toISOString().replace('.000Z', '');
-        console.log(date);
-       
+      console.log(date);
         const params = {
         TableName: 't-InfoLog', // 表名
         FilterExpression: '#ts >= :value AND #log = :value2 AND #ifid = :value3',
