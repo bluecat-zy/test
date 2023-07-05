@@ -31,6 +31,7 @@ newman.run({
         i++;
     }
 })
+console.log(param)
 module.exports.param = param;
 
 
