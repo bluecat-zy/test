@@ -11,12 +11,6 @@ jobs:
   run_js:
     runs-on: ubuntu-latest
     steps:
-    #- name: 配置 AWS 凭证
-     # uses: aws-actions/configure-aws-credentials@v1
-      #with:
-      # aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-       #aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-       #aws-region: ap-south-1 # 替换为你的区域
     - name: Checkout code
       uses: actions/checkout@v2
     # 配置node版本 
@@ -27,14 +21,6 @@ jobs:
     # 安装aws-sdk插件
     - name: install @aws-sdk/client-dynamodb
       run: npm install @aws-sdk/client-dynamodb
-    - name: ls @aws-sdk/client-dynamodb
-      run: npm ls @aws-sdk/client-dynamodb
-    - name: Connect to DynamoDB
-      env:
-        AWS_REGION: ap-south-1
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: node newman/DynamoDb.js
     # 安装newman插件
     - name: install Newman
       run: npm install newman
@@ -43,3 +29,11 @@ jobs:
         echo 'Run newman.js'
         # 执行newman.js
         node newman/newman.js
+    - name: Connect to DynamoDB
+      env:
+        AWS_REGION: ap-south-1
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      run: |
+         echo 'Run DynamoDb.js'
+         node newman/DynamoDb.js
