@@ -54,12 +54,14 @@ separatedData.forEach((item) => {
        
         const params = {
         TableName: 't-InfoLog', // 表名
-        FilterExpression: '#ts >= :value',
+        FilterExpression: '#ts >= :value' AND #log = :value2',
         ExpressionAttributeNames: {
-        '#ts': 'timestamp'
+        '#ts': 'timestamp',
+        '#log': 'logLevel'
         },
         ExpressionAttributeValues: {
-        ':value': { S:date }
+        ':value': { S:date },
+        ':value2': { S:'ERROR' }  
         }
         };
         const command = new ScanCommand(params);
