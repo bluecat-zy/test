@@ -22,17 +22,18 @@ newman.run({
        requestBodyRaw = args.request.body.raw;
        requestPath = args.request.url.path.join('/');
 }).on('done', function (err, response) {
-   // 分隔数据
-const separatedData = requestBodyRaw.trim().split('\n');
- console.log(separatedData);
-// 输出分隔后的数据
-separatedData.forEach((item) => {
-  const jsonData = JSON.parse(item);
-  const vin = findVinValue(jsonData);
-  console.log(vin);
-  console.log();
-});
-  console.log();
+//    // 分隔数据
+// const separatedData = requestBodyRaw.trim().split('\n');
+//  console.log(separatedData);
+// // 输出分隔后的数据
+// separatedData.forEach((item) => {
+//   const jsonData = JSON.parse(item);
+//   const vin = findVinValue(jsonData);
+//   console.log(vin);
+//   console.log();
+// });
+  console.log(requestTitle);
+  console.log(requestPath);
     let i = 0;
     for (let res of response.run.executions) {
       const responseTimeHeader = res.response.headers.find(header => header.key.toLowerCase() === 'date');
