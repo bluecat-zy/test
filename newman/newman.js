@@ -15,6 +15,7 @@ newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
        requestBodyRaw = args.request.body.raw;
+  console.log(requestBodyRaw);
 }).on('done', function (err, response) {
          try {
             const requestBodyArray = JSON.parse(requestBodyRaw);
@@ -40,7 +41,7 @@ newman.run({
         console.log(res.response.code)
         const date = new Date(responseTimeHeader).toISOString().replace('.000Z', ''); 
         
-        const command = new QueryCommand(params);
+       
         const params = {
         TableName: 't-InfoLog', // 表名
         KeyConditionExpression: 'timestamp >= :date',
@@ -48,6 +49,7 @@ newman.run({
         ':date': { S:date }
         }
         };
+        const command = new QueryCommand(params);
         client.send(command)
         .then((response) => {
          console.log('Success! Query results:', response.Items);
