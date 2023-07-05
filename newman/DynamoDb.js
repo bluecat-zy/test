@@ -1,6 +1,6 @@
 const { DynamoDBClient, DescribeTableCommand ,QueryCommand} = require("@aws-sdk/client-dynamodb");
-const { data} = require("./newman");
-console.log(data)
+const { dataArray} = require("./newman");
+console.log(dataArray)
 const client = new DynamoDBClient({
   region: process.env.AWS_REGION,
   credentials: {
