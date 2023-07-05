@@ -20,7 +20,9 @@ jobs:
         node-version: '18'
     # 安装aws-sdk插件
     - name: install @aws-sdk/client-dynamodb
-      run: npm install @aws-sdk/client-dynamodb
+      run: npm install @aws-sdk/client-dynamodb@aws-sdk/lib-dynamodb
+    - name: install @aws-sdk/lib-dynamodb
+      run: npm install @aws-sdk/lib-dynamodb
     # 安装newman插件
     - name: install Newman
       run: npm install newman
