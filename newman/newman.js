@@ -1,7 +1,6 @@
 const newman = require('newman');
 var dataArray =[];
 var requestBodyRaw =[];
-module.exports.dataArray = dataArray;
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
@@ -34,6 +33,7 @@ newman.run({
         dataArray.push({status:res.response.status,code:res.response.code,date:date });
     }
 })
+module.exports.dataArray = dataArray;
 console.log(dataArray);
 const findVinValue = (obj) => {
   for (let key in obj) {
