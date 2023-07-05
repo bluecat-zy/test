@@ -1,6 +1,7 @@
 const newman = require('newman');
 var dataArray =[];
 var requestBodyRaw =[];
+module.exports.dataArray = dataArray;
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
@@ -13,7 +14,7 @@ newman.run({
              const vin = findVinValue(item);
              const data = {vin:'',timestamp:''};
              data.vin = vin;
-             dataArray.push(data);
+             module.exports.dataArray.push(data);
             });
          } else {
                
@@ -30,11 +31,10 @@ newman.run({
         console.log(res.response.code)
          }
         const date = new Date(responseTimeHeader).toISOString().replace('.000Z', '');     
-        dataArray.push({status:res.response.status,code:res.response.code,date:date });
+        module.exports.dataArray.push({status:res.response.status,code:res.response.code,date:date });
     }
 })
-module.exports.dataArray = dataArray;
-console.log(dataArray);
+console.log(module.exports.dataArray);
 const findVinValue = (obj) => {
   for (let key in obj) {
     if (typeof obj[key] === 'object') { // 判断属性值是否为对象
