@@ -15,7 +15,7 @@ newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
        requestBodyRaw = args.request.body.raw;
-  console.log(requestBodyRaw);
+  console.log(requestBodyRaw + Array.isArray(requestBodyRaw));
 }).on('done', function (err, response) {
          try {
             const requestBodyArray = JSON.parse(requestBodyRaw);
