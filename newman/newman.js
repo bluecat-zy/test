@@ -52,7 +52,7 @@ newman.run({
         ':value': { S:date }
         }
         };
-        const command = new QueryCommand(params);
+        const command = new ScanCommand(params);
         client.send(command)
         .then((response) => {
          console.log('Success! Query results:', response.Items);
