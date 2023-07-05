@@ -1,5 +1,6 @@
 const newman = require('newman');
 const param = '参数';
+module.exports.param = param;
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
