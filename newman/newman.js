@@ -1,7 +1,7 @@
 const newman = require('newman');
-var data =[];
+var dataArray =[];
 var requestBodyRaw =[];
-module.exports.data = data;
+module.exports.dataArray = dataArray;
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('beforeRequest', (error, args) => {
@@ -31,7 +31,7 @@ newman.run({
         console.log(res.response.code)
          }
         const date = new Date(responseTimeHeader).toISOString().replace('.000Z', '');     
-        data.push({status:res.response.status,code:res.response.code,date:date });
+        dataArray.push({status:res.response.status,code:res.response.code,date:date });
     }
 })
 
