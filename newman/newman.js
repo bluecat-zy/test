@@ -45,7 +45,7 @@ newman.run({
         '#ifid': 'ifid'
         },
         ExpressionAttributeValues: {
-        //':value': { S:date },
+        ':value': { S:date },
         ':value2': { S:'ERROR'},
         ':value3': { S:'WARN'},
         ':value4': { S:'IT303E'}
