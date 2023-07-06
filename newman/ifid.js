@@ -15,7 +15,7 @@ const ifidMap = new Map([
  ['/eConnectRealTimeStatusRequestsAPI/eConnectReal-TimeStatusResultNotification' ,{ifid: 'IT209C',lamdbda: ""}],
  ['/UBIAPI/UBIThresholdExceedingNotification' ,{ifid: 'IT301E',lamdbda: ""}],
  ['/WarningNotification/WarningNotification' ,{ifid: 'IT302E',lamdbda: ""}],
- ['/AllDiagnosticsAPI/DTCNotification' ,{ifid: 'IT303E',lamdbda: ""}],
+ ['/AllDiagnosticsAPI/DTCNotification' ,{ifid: 'IT303E',lamdbda: {GetMskLambda:true}}],//{GetMskLambda:true,FdfTransferBatch:true}
  ['/AllDiagnosticsAPI/FFDNotification' ,{ifid: 'IT304E',lamdbda: ""}],
  ['/AllDiagnosticsAPI/LastNotification' ,{ifid: 'IT305E',lamdbda: ""}],
  ['/AlarmReportAPI/AlarmNotification' ,{ifid: 'IT306E',lamdbda: ""}],
