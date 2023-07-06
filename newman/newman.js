@@ -84,9 +84,10 @@ newman.run({
         const getMskLambdaCommand = new ScanCommand(params);
         console.log('验证GetMskLambda的数据');
         send(getMskLambdaCommand);  
+       }
       }
      }
-    });
+   });
   }
 })
 
