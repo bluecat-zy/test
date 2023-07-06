@@ -1,16 +1,24 @@
 name: My Workflow
 
 on:
-  push:
-    branches:
-      - main
+ workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Select environment'
+        required: true
+        default: 'development'
 
 jobs:
   jobA:
     runs-on: ubuntu-latest
     steps:
-      - name: Run Job A
-        run: |
+     - name: Get IP
+       run: |
+          # Commands to get the IP address and store it in an environment variable
+          echo "IP=$(curl -s https://api.ipify.org)" >> $GITHUB_ENV
+       id: ip
+     - name: Run Job A
+       run: |
           # Your Job A steps here
           echo "This is Job A"
           exit 1  # Simulate a failure if needed
@@ -20,5 +28,8 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
+      - name: Print IP from Job A
+        run: |
+          echo "The IP address from Job A is ${{ env.IP }}"
       - name: Run Job B
         run: echo "This is Job B"
