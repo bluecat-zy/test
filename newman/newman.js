@@ -56,6 +56,7 @@ newman.run({
       if (requestName.includes("IT208E")) {
       params.ExpressionAttributeValues[':value4'] = { S: 'IT208E' };
       }
+      console.log(params);
      const command = new ScanCommand(params);
       ddbDocClient.send(command)
       .then((response) => {
