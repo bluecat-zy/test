@@ -61,11 +61,11 @@ newman.run({
      const command = new ScanCommand(params);
       ddbDocClient.send(command)
       .then((response) => {
-        response.Items.forEach(item=>{
-          console.log('item.timestamp', item.timestamp.S);
-        });
-      //const sortedItems = response.Items.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-      //console.log('Success! Query results:', response.Items);
+        // response.Items.forEach(item=>{
+        //   console.log('item.timestamp', item.timestamp.S);
+        // });
+      const sortedItems = response.Items.sort((a, b) => new Date(a.timestamp.S) - new Date(b.timestamp.S));
+      console.log('Success! Query results:', sortedItems);
       })
       .catch((error) => {
       console.error('Error:', error);
