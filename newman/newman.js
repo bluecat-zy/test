@@ -64,8 +64,14 @@ newman.run({
         // response.Items.forEach(item=>{
         //   console.log('item.timestamp', item.timestamp.S);
         // });
-      const sortedItems = response.Items.sort((a, b) => new Date(a.timestamp.S) - new Date(b.timestamp.S));
-      console.log('Success! Query results:', sortedItems);
+      const firstItem = response.Items.sort((a, b) => new Date(b.timestamp.S) - new Date(a.timestamp.S)).shift();
+         if (firstItem) {
+         const time = firstItem.timestamp.S; 
+         console.log('第一条数据的时间：', time);
+         console.log(firstItem);
+         } else {
+         console.log('没有找到匹配的数据。');
+         }
       })
       .catch((error) => {
       console.error('Error:', error);
