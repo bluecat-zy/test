@@ -67,6 +67,21 @@ newman.run({
       });
      const command = new ScanCommand(params);
       send(command);
+      if(ifid.lambda){
+        if(ifid.lambda.GetMskLambda == true){
+      params.FilterExpression = 'contains(#ts,:value) AND (#log = :value2 or #log = :value3) AND #lambda = :value4';
+      params.ExpressionAttributeNames = {
+        '#ts': 'timestamp',
+        '#log': 'logLevel',
+        '#lambda': 'lambdaName'
+        },;
+      params.ExpressionAttributeValues = {
+        ':value': { S:date },
+        ':value2': { S:'ERROR'},
+        ':value3': { S:'WARN'},
+        ':value4': { S:'IT303E'}
+        };
+      }
      }
     });
   }
