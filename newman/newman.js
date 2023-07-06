@@ -53,9 +53,10 @@ newman.run({
         }
       };
       const url = requestName.substring(requestName.lastIndexOf("/test")+5);
-      console.log(ifidMap.get(url)!=null);
+      console.log(url);
       const ifid = ifidMap.get(url);
       if (ifidMap.get(url)) {
+        console.log(ifid.ifid);
       params.ExpressionAttributeValues[':value4'] = { S: ifid.ifid };
       }
       console.log('DynamoDB的查询参数：');
