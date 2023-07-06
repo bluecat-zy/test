@@ -90,8 +90,9 @@ function getIfid(requestUrl) {
   if (value.url.includes('(.+)')) {
   var position = value.url.indexOf('(.+)');
   console.log(`模式在位置 ${position} 处找到vin`);
-  const url2 = value.url.substring(position)
-  const url3 = url2.includes("/")?url2.substring(0,url2.indexOf("/")):url2
+  const url2  url.substring(position);
+  const url3 = value.url.substring(position);
+  const url4 = url3.includes("/")?url3.substring(0,url3.indexOf("/")):url3;
   console.log(url3);
   } else {
     console.log("字符串中未找到指定模式");
@@ -140,22 +141,22 @@ function generateParam(date,ifid,vin,lambda){
     };
   if(ifid){
     // 获取下一个可用的键
-    const nextKey = `value${Object.keys(param.ExpressionAttributeValues).length + 1}`;
-    param.FilterExpression += ' AND #ifid = :'+nextKey;
+    const nextKey = `:value${Object.keys(param.ExpressionAttributeValues).length + 1}`;
+    param.FilterExpression += ' AND #ifid = '+nextKey;
     param.ExpressionAttributeNames['#ifid'] = 'ifid';
     param.ExpressionAttributeValues[nextKey] = { S:ifid};  
   }
   if(vin){
     // 获取下一个可用的键
-    const nextKey = `value${Object.keys(param.ExpressionAttributeValues).length + 1}`;
-    param.FilterExpression += ' AND #vin = :'+nextKey;
+    const nextKey = `:value${Object.keys(param.ExpressionAttributeValues).length + 1}`;
+    param.FilterExpression += ' AND #vin = '+nextKey;
     param.ExpressionAttributeNames['#vin'] = 'vin';
     param.ExpressionAttributeValues[nextKey] = { S:vin};  
   }
   if(lambda){
     // 获取下一个可用的键
-    const nextKey = `value${Object.keys(param.ExpressionAttributeValues).length + 1}`;
-    param.FilterExpression += ' AND #lambda = :'+nextKey;
+    const nextKey = `:value${Object.keys(param.ExpressionAttributeValues).length + 1}`;
+    param.FilterExpression += ' AND #lambda = '+nextKey;
     param.ExpressionAttributeNames['#lambda'] = 'lambdaName';
     param.ExpressionAttributeValues[nextKey] = { S:lambda};
   }
