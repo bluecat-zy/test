@@ -34,7 +34,7 @@ newman.run({
       console.log(responseTimeHeader);
       var date = new Date(responseTimeHeader).toISOString();
       console.log(`请求结束的时间：${date}`);
-      date = date.substring(0,date.lastIndexOf(".")-5);
+      date = date.substring(0,date.lastIndexOf(".")-8);
       const params = {
         TableName: 't-InfoLog', // 表名
         FilterExpression: 'contains(#ts,:value) AND (#log = :value2 or #log = :value3) AND #ifid = :value4',
@@ -57,7 +57,7 @@ newman.run({
       if (requestName.includes("IT208E")) {
       params.ExpressionAttributeValues[':value4'] = { S: 'IT208E' };
       }
-     console.log(`DynamoDB的查询参数：${params}`);
+     console.log('DynamoDB的查询参数：',params);
      const command = new ScanCommand(params);
       ddbDocClient.send(command)
       .then((response) => {
