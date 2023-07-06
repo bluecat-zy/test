@@ -51,10 +51,10 @@ newman.run({
         }
       };
       if (requestName.includes("IT303E")) {
-      params.ExpressionAttributeValues[':value3'] = { S: 'IT303E' };
+      params.ExpressionAttributeValues[':value4'] = { S: 'IT303E' };
       }
       if (requestName.includes("IT208E")) {
-      params.ExpressionAttributeValues[':value3'] = { S: 'IT208E' };
+      params.ExpressionAttributeValues[':value4'] = { S: 'IT208E' };
       }
      const command = new ScanCommand(params);
       ddbDocClient.send(command)
