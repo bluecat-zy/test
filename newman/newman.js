@@ -74,7 +74,7 @@ newman.run({
         '#ts': 'timestamp',
         '#log': 'logLevel',
         '#lambda': 'lambdaName'
-        },;
+        };
       params.ExpressionAttributeValues = {
         ':value': { S:date },
         ':value2': { S:'ERROR'},
