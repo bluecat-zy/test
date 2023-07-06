@@ -49,8 +49,7 @@ newman.run({
         ':value2': { S:'ERROR'},
         ':value3': { S:'WARN'},
         ':value4': { S:'IT303E'}
-        },
-        Limit: 10
+        }
       };
       if (requestName.includes("IT303E")) {
       params.ExpressionAttributeValues[':value4'] = { S: 'IT303E' };
