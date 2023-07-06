@@ -57,8 +57,8 @@ newman.run({
       if (requestName.includes("IT208E")) {
       params.ExpressionAttributeValues[':value4'] = { S: 'IT208E' };
       }
-     console.log('DynamoDB的查询参数：',params);
      const command = new ScanCommand(params);
+     console.log('DynamoDB的查询参数：',command);
       ddbDocClient.send(command)
       .then((response) => {
         // response.Items.forEach(item=>{
