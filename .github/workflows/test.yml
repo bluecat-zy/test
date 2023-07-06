@@ -1,0 +1,24 @@
+name: My Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  jobA:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Job A
+        run: |
+          # Your Job A steps here
+          echo "This is Job A"
+          exit 1  # Simulate a failure if needed
+
+  jobB:
+    needs: jobA
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run Job B
+        run: echo "This is Job B"
