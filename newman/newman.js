@@ -19,6 +19,10 @@ newman.run({
     console.error('运行出错:', err || response.error);
   } else {
     console.log('测试运行完成.');
+    console.log("校验请求的执行结果需要等待DynamoDb同步数据---");
+    sleep(1).then(() => {
+    console.log("等待结束--------");
+    });
     // 遍历每个请求的执行结果
     response.run.executions.forEach((execution) => {
       
@@ -39,7 +43,6 @@ newman.run({
       const params = {
         TableName: 't-InfoLog', // 表名
         FilterExpression: 'contains(#ts,:value) AND (#log = :value2 or #log = :value3) AND #ifid = :value4',
-        //FilterExpression: '(#log = :value2 or #log = :value3) AND #ifid = :value4',
         ExpressionAttributeNames: {
         '#ts': 'timestamp',
         '#log': 'logLevel',
@@ -53,19 +56,32 @@ newman.run({
         }
       };
       const url = requestUrl.substring(requestUrl.lastIndexOf("/test")+5);
-      console.log(url);
       console.log(ifidMap.get(url));
       const ifid = ifidMap.get(url);
       if (ifidMap.get(url)) {
-        console.log(ifid.ifid);
+      console.log('ifid获取成功：',url);
       params.ExpressionAttributeValues[':value4'] = { S: ifid.ifid };
-      }
       console.log('DynamoDB的查询参数：');
       Object.entries(params).forEach(([key, value]) => {
       console.log(`${key}:`, value);
       });
      const command = new ScanCommand(params);
-      ddbDocClient.send(command)
+      send(command);
+     }
+    });
+  }
+})
+
+function sleep(minutes) {
+  const milliseconds = minutes * 60000; // 将分钟转换为毫秒
+
+  return new Promise(resolve => {
+    setTimeout(resolve, milliseconds);
+  });
+}
+
+function send(command) {
+  ddbDocClient.send(command)
       .then((response) => {
       // 按照时间降序排序取出第一条数据
       const firstItem = response.Items.sort((a, b) => new Date(b.timestamp.S) - new Date(a.timestamp.S)).shift();
@@ -81,9 +97,10 @@ newman.run({
       .catch((error) => {
       console.error('Error:', error);
       });
-    });
-  }
-})
+}
+
+
+
 
 
 
