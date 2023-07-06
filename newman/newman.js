@@ -1,4 +1,5 @@
 const newman = require('newman');
+const newman = require('./ifid');
 const { DynamoDBClient, DescribeTableCommand ,ScanCommand} = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient } = require("@aws-sdk/lib-dynamodb");
 const client = new DynamoDBClient({
