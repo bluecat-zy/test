@@ -52,7 +52,7 @@ newman.run({
         ':value4': { S:'IT303E'}
         }
       };
-      const url = requestName.substring(date.lastIndexOf("/test")+5);
+      const url = requestName.substring(requestName.lastIndexOf("/test")+5);
       console.log(ifidMap.get(url)!=null);
       const ifid = ifidMap.get(url);
       if (ifidMap.get(url)) {
