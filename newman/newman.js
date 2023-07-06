@@ -66,7 +66,7 @@ newman.run({
       console.log(`${key}:`, value);
       });
      const command = new ScanCommand(params);
-      send(command);
+      send(command,requestName);
       if(ifid.lambda){
         if(ifid.lambda.GetMskLambda == true){
       params.FilterExpression = 'contains(#ts,:value) AND (#log = :value2 or #log = :value3) AND #lambda = :value4';
@@ -83,7 +83,7 @@ newman.run({
         };
         const getMskLambdaCommand = new ScanCommand(params);
         console.log('验证GetMskLambda的数据');
-        send(getMskLambdaCommand);  
+        send(getMskLambdaCommand,requestName);  
        }
       }
      }
@@ -99,7 +99,7 @@ function sleep(minutes) {
   });
 }
 
-function send(command) {
+function send(command,requestName) {
   ddbDocClient.send(command)
       .then((response) => {
       // 按照时间降序排序取出第一条数据
