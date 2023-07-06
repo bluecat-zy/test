@@ -1,5 +1,7 @@
 // 该文件测试用不到的配置可以注释掉,用到的配置不可以注释掉
 const ifidMap = new Map([
+ // 需要验证其它lambda的数据如下配置lamdbda: {lambda名:true}
+ //['IC001S' ,{url: '/MasterOperationAPI/translation',lamdbda: {GetMskLambda:true,FdfTransferBatch:true}],
  //['IC001S' ,{url: '/MasterOperationAPI/translation',lamdbda: ''],
  //['IC002S' ,{url: '/MasterOperationAPI/translationgroup',lamdbda: ''],
  //['IC003S' ,{url: '/MasterOperationAPI/translationeconnect',lamdbda: ''],
@@ -16,7 +18,7 @@ const ifidMap = new Map([
  //['IT209C' ,{url: '/eConnectRealTimeStatusRequestsAPI/eConnectReal-TimeStatusResultNotification',lamdbda: ''],
  //['IT301E' ,{url: '/UBIAPI/UBIThresholdExceedingNotification',lamdbda: ''],
  //['IT302E' ,{url: '/WarningNotification/WarningNotification',lamdbda: ''],
- ['IT303E' ,{url: '/AllDiagnosticsAPI/DTCNotification',lamdbda: {}],
+ ['IT303E' ,{url: '/AllDiagnosticsAPI/DTCNotification',lamdbda: {GetMskLambda:true}}],
  //['IT304E' ,{url: '/AllDiagnosticsAPI/FFDNotification',lamdbda: ''],
  //['IT305E' ,{url: '/AllDiagnosticsAPI/LastNotification',lamdbda: ''],
  //['IT306E' ,{url: '/AlarmReportAPI/AlarmNotification',lamdbda: ''],
