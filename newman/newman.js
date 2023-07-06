@@ -10,7 +10,7 @@ const client = new DynamoDBClient({
   }
 });
 const ddbDocClient = DynamoDBDocumentClient.from(client);
-consloe.log(ifidMap)
+consloe.log(ifidMap);
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('done', function (err, response) {
@@ -53,7 +53,7 @@ newman.run({
         }
       };
       const url = requestName.substring(date.lastIndexOf("/test"));
-      consloe.log(ifidMap.get(url)!=null)
+      consloe.log(ifidMap.get(url)!=null);
       const ifid = ifidMap.get(url);
       if (ifidMap.get(url)) {
       params.ExpressionAttributeValues[':value4'] = { S: ifid.ifid };
