@@ -14,8 +14,17 @@ jobs:
     steps:
      - name: Get IP
        run: |
-          # Commands to get the IP address
-          echo "::set-output name=ip::$(curl -s https://api.ipify.org)"
+          # Commands to get the IP address and store it in a file
+          echo "$(curl -s https://api.ipify.org)" > ip.txt
+       id: ip
+     - name: Upload IP artifact
+       uses: actions/upload-artifact@v2
+       with:
+         name: ip-address
+         path: ip.txt
+     - name: Read IP from file
+       run: |
+          cat ip.txt
      - name: Run Job A
        run: |
           # Your Job A steps here
@@ -27,14 +36,12 @@ jobs:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     steps:
-      - name: Run JavaScript code
-        uses: actions/setup-node@v2
+      - name: Download IP artifact
+        uses: actions/download-artifact@v2
         with:
-          node-version: '14'
-      - name: Read IP from Job A
-        id: read-ip
+          name: ip-address
+      - name: Read IP from file
         run: |
-          echo "IP=${{ needs.jobA.outputs.ip }}" >> $GITHUB_ENV
-      - name: Print IP in JavaScript
-        run: |
-          node -e "console.log(process.env.IP)"
+          cat ip.txt
+      - name: Run Job B
+        run: echo "This is Job B"
