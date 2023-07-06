@@ -26,7 +26,7 @@ newman.run({
       const requestUrl = execution.request.url.toString();
       //const requestHeaders = execution.request.headers.toJSON();
       //const requestBody = execution.request.body;
-      console.log('请求头部：', requestHeaders);
+      console.log('请求标题：', requestName );
       console.log(`请求方法：${requestMethod}`);
       console.log(`请求URL：${requestUrl}`);
       console.log("status:"+execution.response.status+"code:"+execution.response.code)
