@@ -26,7 +26,7 @@ newman.run({
       const requestUrl = execution.request.url.toString();
       //const requestHeaders = execution.request.headers.toJSON();
       //const requestBody = execution.request.body;
-      console.log('请求标题：${requestName}`);
+      console.log(`请求标题：${requestName}`);
       console.log(`请求方法：${requestMethod}`);
       console.log(`请求URL：${requestUrl}`);
       console.log("status:"+execution.response.status+"code:"+execution.response.code)
@@ -67,11 +67,11 @@ newman.run({
       const firstItem = response.Items.sort((a, b) => new Date(b.timestamp.S) - new Date(a.timestamp.S)).shift();
          if (firstItem) {
          const time = firstItem.timestamp.S; 
-         console.log('请求：${requestName}有${firstItem.logLevel.S}`);
-         console.log('第一条数据的时间：', time);
+         console.log(`请求：${requestName}有${firstItem.logLevel.S}`);
+         console.log('该数据的时间：', time);
          console.log(firstItem);
          } else {
-         console.log('请求：${requestName}没有ERROR或者WARN`);
+         console.log(`请求：${requestName}没有ERROR或者WARN`);
          }
       })
       .catch((error) => {
