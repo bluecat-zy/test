@@ -37,14 +37,15 @@ newman.run({
       console.log(date);
       const params = {
         TableName: 't-InfoLog', // 表名
-        FilterExpression: 'contains(#ts,:value) AND (#log = :value2 or #log = :value3) AND #ifid = :value4',
+        //FilterExpression: 'contains(#ts,:value) AND (#log = :value2 or #log = :value3) AND #ifid = :value4',
+        FilterExpression: '(#log = :value2 or #log = :value3) AND #ifid = :value4',
         ExpressionAttributeNames: {
-        '#ts': 'timestamp',
+        //'#ts': 'timestamp',
         '#log': 'logLevel',
         '#ifid': 'ifid'
         },
         ExpressionAttributeValues: {
-        ':value': { S:date },
+        //':value': { S:date },
         ':value2': { S:'ERROR'},
         ':value3': { S:'WARN'},
         ':value4': { S:'IT303E'}
