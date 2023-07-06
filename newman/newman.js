@@ -79,8 +79,11 @@ newman.run({
         ':value': { S:date },
         ':value2': { S:'ERROR'},
         ':value3': { S:'WARN'},
-        ':value4': { S:'IT303E'}
+        ':value4': { S:'GetMskLambda'}
         };
+        const getMskLambdaCommand = new ScanCommand(params);
+        console.log('验证GetMskLambda的数据');
+        send(getMskLambdaCommand);  
       }
      }
     });
@@ -111,7 +114,7 @@ function send(command) {
       })
       .catch((error) => {
       console.error('Error:', error);
-      });
+    });
 }
 
 
