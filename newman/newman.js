@@ -33,14 +33,14 @@ newman.run({
       const responseTimeHeader = execution.response.headers.find(header => header.key.toLowerCase() === 'date');
       console.log(responseTimeHeader);
       var date = new Date(responseTimeHeader).toISOString();
-      date = date.substring(0,date.lastIndexOf(".")-1);
+      date = date.substring(0,date.lastIndexOf(".")-5);
       console.log(date);
       const params = {
         TableName: 't-InfoLog', // 表名
-        //FilterExpression: 'contains(#ts,:value) AND (#log = :value2 or #log = :value3) AND #ifid = :value4',
-        FilterExpression: '(#log = :value2 or #log = :value3) AND #ifid = :value4',
+        FilterExpression: 'contains(#ts,:value) AND (#log = :value2 or #log = :value3) AND #ifid = :value4',
+        //FilterExpression: '(#log = :value2 or #log = :value3) AND #ifid = :value4',
         ExpressionAttributeNames: {
-        //'#ts': 'timestamp',
+        '#ts': 'timestamp',
         '#log': 'logLevel',
         '#ifid': 'ifid'
         },
@@ -62,7 +62,7 @@ newman.run({
       ddbDocClient.send(command)
       .then((response) => {
         response.Items.forEach(item=>{
-          console.log('item.timestamp', item.timestamp);
+          console.log('item.timestamp', item.timestamp.S);
         });
       //const sortedItems = response.Items.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
       //console.log('Success! Query results:', response.Items);
