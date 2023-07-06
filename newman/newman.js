@@ -18,27 +18,22 @@ newman.run({
     console.error('运行出错:', err || response.error);
   } else {
     console.log('测试运行完成.');
-    console.log('总体摘要：', response.summary);
-   
     // 遍历每个请求的执行结果
     response.run.executions.forEach((execution) => {
       
       const requestName = execution.item.name;
       const requestMethod = execution.request.method;
       const requestUrl = execution.request.url.toString();
-      const requestHeaders = execution.request.headers.toJSON();
-      const requestBody = execution.request.body;
-
+      //const requestHeaders = execution.request.headers.toJSON();
+      //const requestBody = execution.request.body;
+      console.log('请求头部：', requestHeaders);
       console.log(`请求方法：${requestMethod}`);
       console.log(`请求URL：${requestUrl}`);
-      //console.log('请求头部：', requestHeaders);
-      //console.log('请求正文：', requestBody);
-      //console.log("status:"+execution.response.status+"code:"+execution.response.code)
-       const responseTimeHeader = execution.response.headers.find(header => header.key.toLowerCase() === 'date');
+      console.log("status:"+execution.response.status+"code:"+execution.response.code)
+      const responseTimeHeader = execution.response.headers.find(header => header.key.toLowerCase() === 'date');
       console.log(responseTimeHeader);
-      const dateObj = new Date(responseTimeHeader);
-      dateObj.setTime(dateObj.getTime() - 3000);
-      const date =  dateObj.toISOString().replace('.000Z', '');
+      var date = new Date(responseTimeHeader).toISOString();
+      date = date.substring(0,date.lastIndexOf(".")-1);
       console.log(date);
       const params = {
         TableName: 't-InfoLog', // 表名
