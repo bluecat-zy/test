@@ -1,4 +1,4 @@
-const data = {{ifid: "IC001S",url: "/MasterOperationAPI/translation",lamdbda: ""},
+const ifid = {{ifid: "IC001S",url: "/MasterOperationAPI/translation",lamdbda: ""},
 {ifid: "IC002S",url:  "/MasterOperationAPI/translationgroup",lamdbda: ""},
 {ifid: "IC003S",url:  "/MasterOperationAPI/translationeconnect",lamdbda: ""},
 {ifid: "IC101S",url:  "/FactoryDataAPI/RegisterFactoryData",lamdbda: ""},
@@ -44,4 +44,4 @@ const data = {{ifid: "IC001S",url: "/MasterOperationAPI/translation",lamdbda: ""
 {ifid: "IT603R",url:  "/SVTAPI/SVTNotification",lamdbda: ""},
 {ifid: "IC604O",url: "/SVTAPI/requests/periodic/", lamdbda: ""}
 }
-module.exports = data;
+module.exports = ifid;
