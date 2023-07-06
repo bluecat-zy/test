@@ -1,5 +1,5 @@
 const newman = require('newman');
-const newman = require('./ifid');
+const ifidMap = require('./ifid');
 const { DynamoDBClient, DescribeTableCommand ,ScanCommand} = require("@aws-sdk/client-dynamodb");
 const { DynamoDBDocumentClient } = require("@aws-sdk/lib-dynamodb");
 const client = new DynamoDBClient({
@@ -10,7 +10,7 @@ const client = new DynamoDBClient({
   }
 });
 const ddbDocClient = DynamoDBDocumentClient.from(client);
-
+consloe.log(ifidMap)
 newman.run({
     collection: require('./20230629FXS.postman_collection.json')
 }).on('done', function (err, response) {
@@ -52,11 +52,11 @@ newman.run({
         ':value4': { S:'IT303E'}
         }
       };
-      if (requestName.includes("IT303E")) {
-      params.ExpressionAttributeValues[':value4'] = { S: 'IT303E' };
-      }
-      if (requestName.includes("IT208E")) {
-      params.ExpressionAttributeValues[':value4'] = { S: 'IT208E' };
+      const url = requestName.substring(date.lastIndexOf("/test"));
+      consloe.log(ifidMap.get(url)!=null)
+      const ifid = ifidMap.get(url);
+      if (ifidMap.get(url)) {
+      params.ExpressionAttributeValues[':value4'] = { S: ifid.ifid };
       }
       console.log('DynamoDB的查询参数：');
       Object.entries(params).forEach(([key, value]) => {
