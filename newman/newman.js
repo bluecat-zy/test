@@ -57,13 +57,14 @@ newman.run({
       if (requestName.includes("IT208E")) {
       params.ExpressionAttributeValues[':value4'] = { S: 'IT208E' };
       }
+      console.log('DynamoDB的查询参数：');
+      Object.entries(params).forEach(([key, value]) => {
+      console.log(`${key}:`, value);
+      });
      const command = new ScanCommand(params);
-     console.log('DynamoDB的查询参数：',command);
       ddbDocClient.send(command)
       .then((response) => {
-        // response.Items.forEach(item=>{
-        //   console.log('item.timestamp', item.timestamp.S);
-        // });
+      // 按照时间降序排序取出第一条数据
       const firstItem = response.Items.sort((a, b) => new Date(b.timestamp.S) - new Date(a.timestamp.S)).shift();
          if (firstItem) {
          const time = firstItem.timestamp.S; 
