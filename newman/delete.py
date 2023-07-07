@@ -22,8 +22,10 @@ for api_id in api_ids:
      # 编辑资源策略
      resource_policy = json.loads(policy.replace("\\", ""))
      #print(resource_policy)
-     resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].remove(ip_address1)
-     resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].remove(ip_address2)
+     if ip_address1  in resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp']:
+        resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].remove(ip_address1)
+     if ip_address2  in resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp']:
+        resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].remove(ip_address2)
      #print(resource_policy)
      update_policy = json.dumps(resource_policy)
      # 更新API的资源策略
