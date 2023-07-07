@@ -17,12 +17,12 @@ try:
     resource_policy = response['policy']
     print(resource_policy)
 
-# 编辑资源策略
-upd_policy = resource_policy.copy()
-upd_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'] = ip_address
+    # 编辑资源策略
+    upd_policy = resource_policy.copy()
+    upd_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'] = ip_address
 
-# 更新API的资源策略
-apigateway.update_rest_api(
+    # 更新API的资源策略
+    apigateway.update_rest_api(
     restApiId=api_id,
     patchOperations=[
         {
@@ -31,13 +31,12 @@ apigateway.update_rest_api(
             'value': upd_policy
         }
     ]
-)
-# 发布API更改
-apigateway.create_deployment(
+    )
+    # 发布API更改
+    apigateway.create_deployment(
     restApiId=api_id,
     stageName='tscgw-pre'
-)
-
+    )
 except Exception as e:
     # 输出异常信息
     print('发生错误:', str(e))
