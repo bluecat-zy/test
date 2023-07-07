@@ -18,8 +18,8 @@ try:
     print(resource_policy)
 
     # 编辑资源策略
-    existing_ips = resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp']
-    existing_ips.append(ip_address)
+    resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].append(ip_address)
+    print(resource_policy)
     # 更新API的资源策略
     apigateway.update_rest_api(
     restApiId=api_id,
@@ -27,7 +27,7 @@ try:
         {
             'op': 'replace',
             'path': '/policy',
-            'value': upd_policy
+            'value': resource_policy
         }
     ]
     )
