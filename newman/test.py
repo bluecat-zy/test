@@ -8,12 +8,12 @@ ip_address2 = '192.169.96.201'
 # 创建 API Gateway 客户端
 client = boto3.client('apigateway', region_name='ap-south-1')
 # 指定要连接的 API 的 RestApiId
-api_ids = ['4qppov5b81', 'xgz4v377ff']
+api_ids = ['4qppov5b81', '4qppov5b81','xgz4v377ff']
 for api_id in api_ids:
  try:
      # 调用客户端的 get_rest_api 方法，指定对应的 RestApiId
      response = client.get_rest_api(restApiId=api_id)
-
+     print(api_id+'----'+response)
      # 输出返回结果
      policy = response['policy']
      print(policy)
