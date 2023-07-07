@@ -46,6 +46,32 @@ try:
     restApiId=api_id
     )
     print(deployments)
+    response2 = client.get_rest_api(restApiId=api_id)
+    resource_policy2 = json.loads(policy.replace("\\", ""))
+    resource_policy2['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].remove(ip_address1)
+    resource_policy2['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].remove(ip_address2)
+    print(resource_policy2)
+    update_policy2 = json.dumps(resource_policy2)
+     # 更新API的资源策略
+    client.update_rest_api(
+    restApiId=api_id,
+    patchOperations=[
+        {
+            'op': 'replace',
+            'path': '/policy',
+            'value': update_policy2
+        }
+    ]
+    )
+     # 发布API更改
+    client.create_deployment(
+    restApiId=api_id,
+    stageName='test'
+    )
+    # 获取API的最新部署
+    deployments2 = client.get_deployments(
+    restApiId=api_id
+    )
     # 检查最新部署的状态
     #latest_deployment = deployments['items'][0]
     #status = latest_deployment['status']
