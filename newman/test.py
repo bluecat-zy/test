@@ -13,7 +13,7 @@ for api_id in api_ids:
  try:
      # 调用客户端的 get_rest_api 方法，指定对应的 RestApiId
      response = client.get_rest_api(restApiId=api_id)
-     print(api_id+'----'+response)
+     print(api_id+'----'+str(response))
      # 输出返回结果
      policy = response['policy']
      print(policy)
