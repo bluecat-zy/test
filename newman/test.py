@@ -25,7 +25,7 @@ updated_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'] = white
 
 # 更新API的资源策略
 apigateway.update_rest_api(
-    restApiId='your-api-id',
+    restApiId=api_id,
     patchOperations=[
         {
             'op': 'replace',
@@ -34,26 +34,14 @@ apigateway.update_rest_api(
         }
     ]
 )
+# 发布API更改
+apigateway.create_deployment(
+    restApiId=api_id,
+    stageName='tscgw-pre'
+)
 
 except Exception as e:
     # 输出异常信息
     print('发生错误:', str(e))
 
-
-#policy = response['policy']
-#print(policy)
-# sta = policy['Statement']
-# print(sta)
-# 使用示例
-
-
-# 增加 IP 到白名单
-# api_ids = rest_api_id.split(',')
-# print(api_ids)
-# for id in api_ids:
-    
-#     response = client.create_deployment(
-#         restApiId = id,
-#         stageName='tscgw-pre'
-#     )
 
