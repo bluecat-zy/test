@@ -22,7 +22,7 @@ jobs:
         python-version: '3.x' # 指定为 3.x
 
     - name: Install dependencies
-      run: pip install aws-sdk-python
+      run: pip install boto3
 
     - name: Connect to AWS
       env:
