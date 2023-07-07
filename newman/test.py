@@ -41,6 +41,19 @@ try:
     restApiId=api_id,
     stageName='test'
     )
+    # 获取API的最新部署
+    deployments = client.get_deployments(
+    restApiId=api_id
+    )
+
+    # 检查最新部署的状态
+    latest_deployment = deployments['items'][0]
+    status = latest_deployment['status']
+
+    if status == 'DEPLOYED':
+    print("API deployment was successful.")
+    else:
+    print("API deployment failed.")
 except Exception as e:
     # 输出异常信息
     print('发生错误:', str(e))
