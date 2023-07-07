@@ -53,9 +53,9 @@ for api_id in api_ids:
      items = deployments['items']
      print(items)
      latest_deployment = next((d for d in items if d['id'] == deployment_id), None)
-      if latest_deployment and latest_deployment['status'] == 'DEPLOYED' and latest_deployment['response']['status'] == 200:
+     if latest_deployment and latest_deployment['status'] == 'DEPLOYED' and latest_deployment['response']['status'] == 200:
          print("API deployment successful for API:", api_id)
-      else:
+     else:
          print("API deployment failed for API:", api_id)
      print("API update successful for API:", api_id)
  except Exception as e:
