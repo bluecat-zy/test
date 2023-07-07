@@ -3,7 +3,7 @@ import boto3
 
 rest_api_id = '4qppov5b81'
 # 更新资源策略中的白名单IP列表
-ip_address1 = '124.156.215.191'
+#ip_address1 = '124.156.215.191'
 ip_address2 = '192.169.96.201'
 # 创建 API Gateway 客户端
 client = boto3.client('apigateway', region_name='ap-south-1')
@@ -21,7 +21,7 @@ try:
     # 编辑资源策略
     resource_policy = json.loads(policy.replace("\\", ""))
     print(resource_policy)
-    resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].append(ip_address1)
+    #resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].append(ip_address1)
     resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].append(ip_address2)
     print(resource_policy)
     update_policy = json.dumps(resource_policy)
@@ -45,15 +45,15 @@ try:
     deployments = client.get_deployments(
     restApiId=api_id
     )
-
+    print(deployments)
     # 检查最新部署的状态
-    latest_deployment = deployments['items'][0]
-    status = latest_deployment['status']
+    #latest_deployment = deployments['items'][0]
+    #status = latest_deployment['status']
 
-    if status == 'DEPLOYED':
-    print("API deployment was successful.")
-    else:
-    print("API deployment failed.")
+    #if status == 'DEPLOYED':
+    #print("API deployment was successful.")
+    #else:
+    #print("API deployment failed.")
 except Exception as e:
     # 输出异常信息
     print('发生错误:', str(e))
