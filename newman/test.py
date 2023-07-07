@@ -24,7 +24,7 @@ try:
     print(resource_policy)
     update_policy = json.dumps(resource_policy)
     # 更新API的资源策略
-    apigateway.update_rest_api(
+    client.update_rest_api(
     restApiId=api_id,
     patchOperations=[
         {
@@ -35,7 +35,7 @@ try:
     ]
     )
     # 发布API更改
-    apigateway.create_deployment(
+    client.create_deployment(
     restApiId=api_id,
     stageName='tscgw-pre'
     )
