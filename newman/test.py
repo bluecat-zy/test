@@ -21,10 +21,10 @@ for api_id in api_ids:
 
      # 编辑资源策略
      resource_policy = json.loads(policy.replace("\\", ""))
-     print(resource_policy)
+     #print(resource_policy)
      resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].append(ip_address1)
      resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].append(ip_address2)
-     print(resource_policy)
+     #print(resource_policy)
      update_policy = json.dumps(resource_policy)
      # 更新API的资源策略
      client.update_rest_api(
@@ -47,20 +47,15 @@ for api_id in api_ids:
      deployments = client.get_deployments(
      restApiId=api_id
      )
-     print(deployments)
      # 获取最新的部署状态
-     deployment_id = deployments['id']
-     items = deployments['items']
-     print(items)
-     latest_deployment = next((d for d in items if d['id'] == deployment_id), None)
-     if latest_deployment and latest_deployment['status'] == 'DEPLOYED' and latest_deployment['response']['status'] == 200:
+     HTTPStatusCode = deployments['HTTPStatusCode']
+     if HTTPStatusCode == 200:
          print("API deployment successful for API:", api_id)
      else:
          print("API deployment failed for API:", api_id)
-     print("API update successful for API:", api_id)
  except Exception as e:
      # 输出异常信息
-     print("An error occurred while deploying API:", api_id)
+     print("An error occurred API:", api_id)
      print('发生错误:', str(e))
 
 
