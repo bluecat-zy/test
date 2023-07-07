@@ -17,11 +17,11 @@ try:
     print(resource_policy)
 
 # 更新资源策略中的白名单IP列表
-white_list_ips = ['192.169.96.201'] 
+ip_whitelist = ['192.169.96.201'] 
 
 # 编辑资源策略
 updated_policy = resource_policy.copy()
-updated_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'] = white_list_ips
+updated_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'] = ip_whitelist
 
 # 更新API的资源策略
 apigateway.update_rest_api(
