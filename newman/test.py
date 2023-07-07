@@ -18,9 +18,9 @@ try:
     print(resource_policy)
 
     # 编辑资源策略
-    upd_policy = resource_policy.copy()
-    upd_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'] = ip_address
-
+    policy_json = json.loads(resource_policy)
+    policy_json['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'] = ip_address
+    updated_policy = json.dumps(policy_json)
     # 更新API的资源策略
     apigateway.update_rest_api(
     restApiId=api_id,
