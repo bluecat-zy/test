@@ -2,6 +2,7 @@ import json;
 import boto3
 
 rest_api_id = '4qppov5b81'
+# 更新资源策略中的白名单IP列表
 ip_address = '192.169.96.201'
 # 创建 API Gateway 客户端
 client = boto3.client('apigateway', region_name='ap-south-1')
@@ -16,12 +17,9 @@ try:
     resource_policy = response['policy']
     print(resource_policy)
 
-# 更新资源策略中的白名单IP列表
-ip_whitelist = ['192.169.96.201'] 
-
 # 编辑资源策略
 updated_policy = resource_policy.copy()
-updated_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'] = ip_whitelist
+updated_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'] = ip_address
 
 # 更新API的资源策略
 apigateway.update_rest_api(
