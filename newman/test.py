@@ -37,7 +37,7 @@ try:
     # 发布API更改
     client.create_deployment(
     restApiId=api_id,
-    stageName='tscgw-pre'
+    stageName='test'
     )
 except Exception as e:
     # 输出异常信息
