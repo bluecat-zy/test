@@ -49,7 +49,7 @@ for api_id in api_ids:
      )
      print(deployments)
      # 获取最新的部署状态
-     deployment_id = deployment['id']
+     deployment_id = deployments['id']
      items = deployments['items']
      print(items)
      latest_deployment = next((d for d in items if d['id'] == deployment_id), None)
