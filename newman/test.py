@@ -13,8 +13,27 @@ try:
     response = client.get_rest_api(restApiId=api_id)
 
     # 输出返回结果
-    policy = response['policy']
-    print(policy)
+    resource_policy = response['policy']
+    print(resource_policy)
+
+# 更新资源策略中的白名单IP列表
+white_list_ips = ['192.169.96.201'] 
+
+# 编辑资源策略
+updated_policy = resource_policy.copy()
+updated_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'] = white_list_ips
+
+# 更新API的资源策略
+apigateway.update_rest_api(
+    restApiId='your-api-id',
+    patchOperations=[
+        {
+            'op': 'replace',
+            'path': '/policy',
+            'value': updated_policy
+        }
+    ]
+)
 
 except Exception as e:
     # 输出异常信息
