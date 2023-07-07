@@ -47,17 +47,19 @@ for api_id in api_ids:
      restApiId=api_id
      )
      print(deployments)
+     # 获取最新的部署状态
+     deployment_id = deployment['id']
+     items = deployments['items']
+     print(items)
+     latest_deployment = next((d for d in items if d['id'] == deployment_id), None)
+      if latest_deployment and latest_deployment['status'] == 'DEPLOYED' and latest_deployment['response']['status'] == 200:
+         print("API deployment successful for API:", api_id)
+      else:
+         print("API deployment failed for API:", api_id)
      print("API update successful for API:", api_id)
-     # 检查最新部署的状态
-     #latest_deployment = deployments['items'][0]
-     #status = latest_deployment['status']
-
-     #if status == 'DEPLOYED':
-     #print("API deployment was successful.")
-     #else:
-     #print("API deployment failed.")
  except Exception as e:
      # 输出异常信息
+     print("An error occurred while deploying API:", api_id)
      print('发生错误:', str(e))
 
 
