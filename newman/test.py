@@ -1,12 +1,6 @@
 import json;
 import boto3
-access_key = 'AKIARA2JM4WX3VI6HL4T'
-secret_key = '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'
 
-session = boto3.Session(
-    aws_access_key_id=access_key,
-    aws_secret_access_key=secret_key
-)
 rest_api_id = '4qppov5b81'
 ip_address = '192.169.96.201'
 # 创建 API Gateway 客户端
