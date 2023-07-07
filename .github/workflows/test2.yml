@@ -30,3 +30,5 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # 将AWS访问密钥存储在GitHub仓库的secrets中
         AWS_REGION: ap-south-1 # 将此替换为你使用的AWS区域
       run: python newman/test.py # 替换为你要运行的Python脚本
+    - name: delete api
+      run: python newman/delete.py # 替换为你要运行的Python脚本
