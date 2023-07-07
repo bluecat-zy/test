@@ -14,10 +14,10 @@ for api_id in api_ids:
  try:
      # 调用客户端的 get_rest_api 方法，指定对应的 RestApiId
      response = client.get_rest_api(restApiId=api_id)
-     print(api_id+'----'+str(response))
+     #print(api_id+'----'+str(response))
      # 输出返回结果
      policy = response['policy']
-     print(policy)
+     #print(policy)
 
      # 编辑资源策略
      resource_policy = json.loads(policy.replace("\\", ""))
@@ -37,7 +37,7 @@ for api_id in api_ids:
          }
      ]
      )
-     print("API deploy successful for API:", api_id)
+     print("API update successful for API:", api_id)
      # 发布API更改
      client.create_deployment(
      restApiId=api_id,
@@ -48,8 +48,8 @@ for api_id in api_ids:
      restApiId=api_id
      )
      # 获取最新的部署状态
-     HTTPStatusCode = deployments['HTTPStatusCode']
-     if HTTPStatusCode == 200:
+     httpStatusCode = deployments['HTTPStatusCode']
+     if httpStatusCode == 200:
          print("API deployment successful for API:", api_id)
      else:
          print("API deployment failed for API:", api_id)
