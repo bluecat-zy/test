@@ -13,7 +13,8 @@ try:
     response = client.get_rest_api(restApiId=api_id)
 
     # 输出返回结果
-    print(response)
+    policy = response['policy']
+    print(policy)
 
 except Exception as e:
     # 输出异常信息
