@@ -36,6 +36,7 @@ for api_id in api_ids:
          }
      ]
      )
+     print("API deploy successful for API:", api_id)
      # 发布API更改
      client.create_deployment(
      restApiId=api_id,
@@ -46,6 +47,7 @@ for api_id in api_ids:
      restApiId=api_id
      )
      print(deployments)
+     print("API update successful for API:", api_id)
      # 检查最新部署的状态
      #latest_deployment = deployments['items'][0]
      #status = latest_deployment['status']
