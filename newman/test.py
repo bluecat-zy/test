@@ -18,7 +18,7 @@ try:
     print(policy)
 
     # 编辑资源策略
-    resource_policy = json.loads(policy.replace("'", "\""))
+    resource_policy = json.loads(policy.replace("\\", ""))
     print(resource_policy)
     resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].append(ip_address)
     print(resource_policy)
