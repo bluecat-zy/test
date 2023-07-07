@@ -48,7 +48,7 @@ for api_id in api_ids:
      restApiId=api_id
      )
      # 获取最新的部署状态
-     httpStatusCode = deploymentsdata['ResponseMetadata']['HTTPStatusCode']
+     httpStatusCode = deployments['ResponseMetadata']['HTTPStatusCode']
      if httpStatusCode == 200:
          print("API deployment successful for API:", api_id)
      else:
