@@ -1,0 +1,305 @@
+name: GitHub Actions karate
+
+on: 
+  workflow_dispatch:
+
+permissions: read-all
+env:
+  S3_BUCKET_NAME: ${{ vars.S3_IN_BUCKET_NAME }}
+  IFIDS: ${{ vars.IFIDS }}
+  API_IDS: ${{ vars.API_IDS }}
+  STAGE: ${{ vars.STAGE }}
+  REPO: ${{ vars.REPO }}
+  DATA_PATH: ${{ vars.DATA_PATH }}
+jobs:
+  add_ip_and_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Get IP
+        run: |
+            echo "$(curl  ifconfig.me )" > ip.txt
+        id: ip
+      - name: Upload IP Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ip-address
+          path: ip.txt
+      - name: Read IP From File
+        run: |
+            cat ip.txt
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_IN_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_IN_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_IN_REGION }}
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install boto3
+      - name: Add Ip
+        run: |
+          python -c"import json;
+          import boto3;
+          import os;
+          ip_path = os.environ.get('REPO') +'/ip.txt'
+          print(ip_path)
+          with open(ip_path, 'r') as files:
+              file = files.read()
+          ip = file.replace('\n','')
+          print(ip)
+          api_ids = os.environ.get('API_IDS').split(',')
+          stage = os.environ.get('STAGE')
+          def addIp(api_id):
+            client = boto3.client('apigateway', region_name='ap-south-1')
+            try:
+                response = client.get_rest_api(restApiId=api_id)
+                policy = response['policy']
+                resource_policy = json.loads(policy.replace('\\\\', ''))
+                if ip not in resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp']:
+                    resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].append(ip)
+                update_policy = json.dumps(resource_policy)
+                client.update_rest_api(
+                    restApiId=api_id,
+                    patchOperations=[
+                        {
+                            'op': 'replace',
+                            'path': '/policy',
+                            'value': update_policy
+                        }
+                    ]
+                )
+                print('API update successful for API:', api_id)
+                client.create_deployment(
+                    restApiId=api_id,
+                    stageName=stage
+                )
+                deployments = client.get_deployments(
+                    restApiId=api_id
+                )
+                httpStatusCode = deployments['ResponseMetadata']['HTTPStatusCode']
+                if httpStatusCode == 200:
+                    print('API deployment successful for API:', api_id)
+                else:
+                    print('API deployment failed for API:', api_id)
+            except Exception as e:
+                print('An error occurred API:', api_id)
+                print('エラーが発生しました:', str(e))
+          for api_id in api_ids:
+              addIp(api_id)
+          "
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'corretto'
+      - name: Karate Send Message
+        run: |
+          curl -L -o karate.jar https://github.com/intuit/karate/releases/download/v1.4.0/karate-1.4.0.jar
+          java -jar karate.jar ./.github/demo.feature
+    
+      - name: Install AWS CLI
+        run: |
+          sudo apt-get update && sudo apt-get install -y python3-pip
+          pip3 install awscli --upgrade --user
+      - name: Publish Reports to S3
+        run: |
+          aws s3 sync ${{ vars.REPO }}/target/ s3://${{ vars.S3_IN_BUCKET_NAME }}/karate_test/
+      - name: Check IC101S Other Log
+        run: |
+          python -c"import boto3;
+          import os;
+          import json;
+          from datetime import date;
+          def query_data_IC101Sother(ifid,vin):
+            dynamodb = boto3.resource('dynamodb',region_name= 'ap-south-1')
+            table = dynamodb.Table('t-InfoLog')
+            today = date.today().isoformat()
+            items = []
+            response = table.scan(
+                FilterExpression='#field = :value AND #field2 = :value2 AND begins_with(#field3, :value3)',
+                ExpressionAttributeNames={
+                    '#field': 'ifid',
+                    '#field2': 'vin',
+                    '#field3': 'timestamp'
+                },
+                ExpressionAttributeValues={
+                    ':value': ifid,
+                    ':value2':vin,
+                    ':value3': today
+                }
+            )
+            while True:
+                items.extend(response.get('Items', []))
+                last_evaluated_key = response.get('LastEvaluatedKey')
+                if last_evaluated_key:
+                    response = table.scan(
+                        FilterExpression='#field = :value AND #field2 = :value2 AND begins_with(#field3, :value3)',
+                        ExpressionAttributeNames={
+                            '#field': 'ifid',
+                            '#field2': 'vin',
+                            '#field3': 'timestamp'
+                        },
+                        ExpressionAttributeValues={
+                            ':value': ifid,
+                            ':value2':vin,
+                            ':value3': today
+                        },
+                        ExclusiveStartKey=last_evaluated_key
+                        )
+                else:
+                    break
+            loglist = sorted(items, key=lambda x: x['timestamp'], reverse=True)
+            print(loglist[0])
+            loglevel = loglist[0].get('logLevel') if loglist[0] else None
+            if loglevel == 'INFO':
+                print(ifid + ' :This LogLevel is ' + loglevel)
+            else:
+                raise Exception(ifid + ' :This LogLevel is ' + loglevel)
+          ifids = os.environ.get('IFIDS')
+          items = ifids.split(',')
+          for element in items:
+              data_path = os.environ.get('DATA_PATH') + element + '/' + element + '.json'
+              data = json.load(open(data_path));
+              vin = data['body']['Vin']
+              print(vin)
+              if element != 'IC101S':
+                query_data_IC101Sother(element,vin)
+          "
+      - name: Check IC101S Log
+        run: |
+          python -c"import boto3;
+          import os;
+          import time;
+          from datetime import date;
+          def query_data_IC101S(ifid):
+            dynamodb = boto3.resource('dynamodb',region_name= 'ap-south-1')
+            table = dynamodb.Table('t-InfoLog')
+            today = date.today().isoformat()
+            items = []
+            response = table.scan(
+                FilterExpression='#field = :value AND begins_with(#field2, :value2)',
+                ExpressionAttributeNames={
+                    '#field': 'ifid',
+                    '#field2': 'timestamp'
+                },
+                ExpressionAttributeValues={
+                    ':value': ifid,
+                    ':value2': today
+                }
+            )
+            while True:
+                items.extend(response.get('Items', []))
+                last_evaluated_key = response.get('LastEvaluatedKey')
+                if last_evaluated_key:
+                    response = table.scan(
+                        FilterExpression='#field = :value AND begins_with(#field2, :value2)',
+                        ExpressionAttributeNames={
+                            '#field': 'ifid',
+                            '#field2': 'timestamp'
+                        },
+                        ExpressionAttributeValues={
+                            ':value': ifid,
+                            ':value2': today
+                        },
+                        ExclusiveStartKey=last_evaluated_key
+                        )
+                else:
+                    break
+            loglist = sorted(items, key=lambda x: x['timestamp'], reverse=True)
+            print(loglist[0])
+            loglevel = loglist[0].get('logLevel') if loglist[0] else None
+            if loglevel == 'INFO' :
+                print(ifid + ' :This LogLevel is ' + loglevel)
+            else:
+                raise Exception(ifid + ' :This LogLevel is ' + loglevel)
+          ifids = os.environ.get('IFIDS')
+          items = ifids.split(',')
+          for element in items:
+              if element == 'IC101S':
+                  query_data_IC101S(element)
+          "
+  delete_ip:
+    needs: add_ip_and_test
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download IP Artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: ip-address
+      - name: Read IP From File
+        run: |
+          cat ip.txt
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_IN_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_IN_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_IN_REGION }}
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install boto3
+      - name: Delete Ip
+        run: |
+          python -c"import json;
+          import boto3;
+          import os;
+          ip_path = os.environ.get('REPO') +'/ip.txt'
+          print(ip_path)
+          with open(ip_path , 'r') as files:
+              file = files.read()
+          ip = file.replace('\n','')
+          print(ip)
+          stage = os.environ.get('STAGE')
+          api_ids = os.environ.get('API_IDS').split(',')
+          def deleteIp(api_id):
+            client = boto3.client('apigateway', region_name='ap-south-1')
+            try:
+                response = client.get_rest_api(restApiId=api_id)
+                policy = response['policy']
+                resource_policy = json.loads(policy.replace('\\\\', ''))
+                if ip in resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp']:
+                    resource_policy['Statement'][0]['Condition']['IpAddress']['aws:SourceIp'].remove(ip)
+                update_policy = json.dumps(resource_policy)
+                print(update_policy)
+                client.update_rest_api(
+                    restApiId=api_id,
+                    patchOperations=[
+                        {
+                            'op': 'replace',
+                            'path': '/policy',
+                            'value': update_policy
+                        }
+                    ]
+                )
+                print('API delete successful for API:', api_id)
+                client.create_deployment(
+                    restApiId=api_id,
+                    stageName=stage
+                )
+                deployments = client.get_deployments(
+                    restApiId=api_id
+                )
+                httpStatusCode = deployments['ResponseMetadata']['HTTPStatusCode']
+                if httpStatusCode == 200:
+                    print('API deployment successful for API:', api_id)
+                else:
+                    print('API deployment failed for API:', api_id)
+            except Exception as e:
+                print('An error occurred API:', api_id)
+                print('エラーが発生しました:', str(e))
+          for api_id in api_ids:
+              deleteIp(api_id)
+          "
