@@ -5,11 +5,11 @@ on:
 
 permissions: read-all
 env:
-  S3_BUCKET_NAME: ${{ vars.S3_IN_BUCKET_NAME }}
+#  S3_BUCKET_NAME: ${{ vars.S3_IN_BUCKET_NAME }}
 #  IFIDS: ${{ vars.IFIDS }}
   API_IDS: ${{ vars.API_IDS }}
   STAGE: ${{ vars.STAGE }}
-#   REPO: ${{ vars.REPO }}
+  REPO: ${{ vars.REPO }}
 #  DATA_PATH: ${{ vars.DATA_PATH }}
 jobs:
   add_ip_and_test:
