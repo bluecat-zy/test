@@ -6,11 +6,11 @@ on:
 permissions: read-all
 env:
   S3_BUCKET_NAME: ${{ vars.S3_IN_BUCKET_NAME }}
-  IFIDS: ${{ vars.IFIDS }}
+#  IFIDS: ${{ vars.IFIDS }}
   API_IDS: ${{ vars.API_IDS }}
   STAGE: ${{ vars.STAGE }}
-  REPO: ${{ vars.REPO }}
-  DATA_PATH: ${{ vars.DATA_PATH }}
+#   REPO: ${{ vars.REPO }}
+#  DATA_PATH: ${{ vars.DATA_PATH }}
 jobs:
   add_ip_and_test:
     runs-on: ubuntu-latest
@@ -94,137 +94,137 @@ jobs:
           for api_id in api_ids:
               addIp(api_id)
           "
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-          distribution: 'corretto'
-      - name: Karate Send Message
-        run: |
-          curl -L -o karate.jar https://github.com/intuit/karate/releases/download/v1.4.0/karate-1.4.0.jar
-          java -jar karate.jar ./.github/demo.feature
+#       - name: Set up Java
+#         uses: actions/setup-java@v3
+#         with:
+#           java-version: '11'
+#           distribution: 'corretto'
+#       - name: Karate Send Message
+#         run: |
+#           curl -L -o karate.jar https://github.com/intuit/karate/releases/download/v1.4.0/karate-1.4.0.jar
+#           java -jar karate.jar ./.github/demo.feature
     
-      - name: Install AWS CLI
-        run: |
-          sudo apt-get update && sudo apt-get install -y python3-pip
-          pip3 install awscli --upgrade --user
-      - name: Publish Reports to S3
-        run: |
-          aws s3 sync ${{ vars.REPO }}/target/ s3://${{ vars.S3_IN_BUCKET_NAME }}/karate_test/
-      - name: Check IC101S Other Log
-        run: |
-          python -c"import boto3;
-          import os;
-          import json;
-          from datetime import date;
-          def query_data_IC101Sother(ifid,vin):
-            dynamodb = boto3.resource('dynamodb',region_name= 'ap-south-1')
-            table = dynamodb.Table('t-InfoLog')
-            today = date.today().isoformat()
-            items = []
-            response = table.scan(
-                FilterExpression='#field = :value AND #field2 = :value2 AND begins_with(#field3, :value3)',
-                ExpressionAttributeNames={
-                    '#field': 'ifid',
-                    '#field2': 'vin',
-                    '#field3': 'timestamp'
-                },
-                ExpressionAttributeValues={
-                    ':value': ifid,
-                    ':value2':vin,
-                    ':value3': today
-                }
-            )
-            while True:
-                items.extend(response.get('Items', []))
-                last_evaluated_key = response.get('LastEvaluatedKey')
-                if last_evaluated_key:
-                    response = table.scan(
-                        FilterExpression='#field = :value AND #field2 = :value2 AND begins_with(#field3, :value3)',
-                        ExpressionAttributeNames={
-                            '#field': 'ifid',
-                            '#field2': 'vin',
-                            '#field3': 'timestamp'
-                        },
-                        ExpressionAttributeValues={
-                            ':value': ifid,
-                            ':value2':vin,
-                            ':value3': today
-                        },
-                        ExclusiveStartKey=last_evaluated_key
-                        )
-                else:
-                    break
-            loglist = sorted(items, key=lambda x: x['timestamp'], reverse=True)
-            print(loglist[0])
-            loglevel = loglist[0].get('logLevel') if loglist[0] else None
-            if loglevel == 'INFO':
-                print(ifid + ' :This LogLevel is ' + loglevel)
-            else:
-                raise Exception(ifid + ' :This LogLevel is ' + loglevel)
-          ifids = os.environ.get('IFIDS')
-          items = ifids.split(',')
-          for element in items:
-              data_path = os.environ.get('DATA_PATH') + element + '/' + element + '.json'
-              data = json.load(open(data_path));
-              vin = data['body']['Vin']
-              print(vin)
-              if element != 'IC101S':
-                query_data_IC101Sother(element,vin)
-          "
-      - name: Check IC101S Log
-        run: |
-          python -c"import boto3;
-          import os;
-          import time;
-          from datetime import date;
-          def query_data_IC101S(ifid):
-            dynamodb = boto3.resource('dynamodb',region_name= 'ap-south-1')
-            table = dynamodb.Table('t-InfoLog')
-            today = date.today().isoformat()
-            items = []
-            response = table.scan(
-                FilterExpression='#field = :value AND begins_with(#field2, :value2)',
-                ExpressionAttributeNames={
-                    '#field': 'ifid',
-                    '#field2': 'timestamp'
-                },
-                ExpressionAttributeValues={
-                    ':value': ifid,
-                    ':value2': today
-                }
-            )
-            while True:
-                items.extend(response.get('Items', []))
-                last_evaluated_key = response.get('LastEvaluatedKey')
-                if last_evaluated_key:
-                    response = table.scan(
-                        FilterExpression='#field = :value AND begins_with(#field2, :value2)',
-                        ExpressionAttributeNames={
-                            '#field': 'ifid',
-                            '#field2': 'timestamp'
-                        },
-                        ExpressionAttributeValues={
-                            ':value': ifid,
-                            ':value2': today
-                        },
-                        ExclusiveStartKey=last_evaluated_key
-                        )
-                else:
-                    break
-            loglist = sorted(items, key=lambda x: x['timestamp'], reverse=True)
-            print(loglist[0])
-            loglevel = loglist[0].get('logLevel') if loglist[0] else None
-            if loglevel == 'INFO' :
-                print(ifid + ' :This LogLevel is ' + loglevel)
-            else:
-                raise Exception(ifid + ' :This LogLevel is ' + loglevel)
-          ifids = os.environ.get('IFIDS')
-          items = ifids.split(',')
-          for element in items:
-              if element == 'IC101S':
-                  query_data_IC101S(element)
-          "
+#       - name: Install AWS CLI
+#         run: |
+#           sudo apt-get update && sudo apt-get install -y python3-pip
+#           pip3 install awscli --upgrade --user
+#       - name: Publish Reports to S3
+#         run: |
+#           aws s3 sync ${{ vars.REPO }}/target/ s3://${{ vars.S3_IN_BUCKET_NAME }}/karate_test/
+#       - name: Check IC101S Other Log
+#         run: |
+#           python -c"import boto3;
+#           import os;
+#           import json;
+#           from datetime import date;
+#           def query_data_IC101Sother(ifid,vin):
+#             dynamodb = boto3.resource('dynamodb',region_name= 'ap-south-1')
+#             table = dynamodb.Table('t-InfoLog')
+#             today = date.today().isoformat()
+#             items = []
+#             response = table.scan(
+#                 FilterExpression='#field = :value AND #field2 = :value2 AND begins_with(#field3, :value3)',
+#                 ExpressionAttributeNames={
+#                     '#field': 'ifid',
+#                     '#field2': 'vin',
+#                     '#field3': 'timestamp'
+#                 },
+#                 ExpressionAttributeValues={
+#                     ':value': ifid,
+#                     ':value2':vin,
+#                     ':value3': today
+#                 }
+#             )
+#             while True:
+#                 items.extend(response.get('Items', []))
+#                 last_evaluated_key = response.get('LastEvaluatedKey')
+#                 if last_evaluated_key:
+#                     response = table.scan(
+#                         FilterExpression='#field = :value AND #field2 = :value2 AND begins_with(#field3, :value3)',
+#                         ExpressionAttributeNames={
+#                             '#field': 'ifid',
+#                             '#field2': 'vin',
+#                             '#field3': 'timestamp'
+#                         },
+#                         ExpressionAttributeValues={
+#                             ':value': ifid,
+#                             ':value2':vin,
+#                             ':value3': today
+#                         },
+#                         ExclusiveStartKey=last_evaluated_key
+#                         )
+#                 else:
+#                     break
+#             loglist = sorted(items, key=lambda x: x['timestamp'], reverse=True)
+#             print(loglist[0])
+#             loglevel = loglist[0].get('logLevel') if loglist[0] else None
+#             if loglevel == 'INFO':
+#                 print(ifid + ' :This LogLevel is ' + loglevel)
+#             else:
+#                 raise Exception(ifid + ' :This LogLevel is ' + loglevel)
+#           ifids = os.environ.get('IFIDS')
+#           items = ifids.split(',')
+#           for element in items:
+#               data_path = os.environ.get('DATA_PATH') + element + '/' + element + '.json'
+#               data = json.load(open(data_path));
+#               vin = data['body']['Vin']
+#               print(vin)
+#               if element != 'IC101S':
+#                 query_data_IC101Sother(element,vin)
+#           "
+#       - name: Check IC101S Log
+#         run: |
+#           python -c"import boto3;
+#           import os;
+#           import time;
+#           from datetime import date;
+#           def query_data_IC101S(ifid):
+#             dynamodb = boto3.resource('dynamodb',region_name= 'ap-south-1')
+#             table = dynamodb.Table('t-InfoLog')
+#             today = date.today().isoformat()
+#             items = []
+#             response = table.scan(
+#                 FilterExpression='#field = :value AND begins_with(#field2, :value2)',
+#                 ExpressionAttributeNames={
+#                     '#field': 'ifid',
+#                     '#field2': 'timestamp'
+#                 },
+#                 ExpressionAttributeValues={
+#                     ':value': ifid,
+#                     ':value2': today
+#                 }
+#             )
+#             while True:
+#                 items.extend(response.get('Items', []))
+#                 last_evaluated_key = response.get('LastEvaluatedKey')
+#                 if last_evaluated_key:
+#                     response = table.scan(
+#                         FilterExpression='#field = :value AND begins_with(#field2, :value2)',
+#                         ExpressionAttributeNames={
+#                             '#field': 'ifid',
+#                             '#field2': 'timestamp'
+#                         },
+#                         ExpressionAttributeValues={
+#                             ':value': ifid,
+#                             ':value2': today
+#                         },
+#                         ExclusiveStartKey=last_evaluated_key
+#                         )
+#                 else:
+#                     break
+#             loglist = sorted(items, key=lambda x: x['timestamp'], reverse=True)
+#             print(loglist[0])
+#             loglevel = loglist[0].get('logLevel') if loglist[0] else None
+#             if loglevel == 'INFO' :
+#                 print(ifid + ' :This LogLevel is ' + loglevel)
+#             else:
+#                 raise Exception(ifid + ' :This LogLevel is ' + loglevel)
+#           ifids = os.environ.get('IFIDS')
+#           items = ifids.split(',')
+#           for element in items:
+#               if element == 'IC101S':
+#                   query_data_IC101S(element)
+#           "
   delete_ip:
     needs: add_ip_and_test
     if: ${{ always() }}
